@@ -220,11 +220,46 @@
             <div>{{$solicitacao->observacao}}</div>
         </div>
 
+        <div class="mt-3"><h4>Anexos</h4></div>
+        <div class="row">
+            @isset($solicitacao->documentImages)
+                @foreach ($solicitacao->documentImages as $document)
+                    <div class="col-6 col-md-3 mb-2">
+                        <div class="foto">
+                            @php
+                                $ext_icon = [
+                                    'pdf' => '<i class="fa-solid fa-file-pdf"></i>',
+                                    'doc' => '<i class="fa-solid fa-file-lines"></i>',
+                                    'docx' => '<i class="fa-solid fa-file-lines"></i>',
+                                    'csv' => '<i class="fa-solid fa-file-csv"></i>',
+                                    'xlsx' => '<i class="fa-solid fa-file-excel"></i>',
+                                    'xls' => '<i class="fa-solid fa-file-excel"></i>',
+                                ];
+                                $ext = explode('.', $document->name);
+                                $ext = $ext[count($ext) - 1];
+                            @endphp
+                            @if (array_key_exists($ext, $ext_icon))
+                                <a href="{{$document->link}}" target="_blank" title="{{$document->name}}" style="width: 100px;height: 100px;margin-top: 10px">{!!$ext_icon[$ext]!!}</a>
+                            @else
+                                <a href="{{$document->link}}" target="_blank" title="{{$document->name}}"><div style="
+                                    background-image: url({{$document->link}});
+                                    width: 100px;
+                                    height: 100px;
+                                    background-repeat: no-repeat;
+                                    background-position: center;
+                                    background-size: contain;
+                                    margin-top: 10px;"></div></a>
+                            @endif
+                        </div>
+                    </div>
+                @endforeach
+            @endisset
+        </div>
+
         <div class="row">
             <div class="form-group col-12"><h2>Informações Faltantes ou Incorretas</h2></div>
             <div class="form-group col-6">Campo</div>
             <div class="form-group col-4">Motivo</div>
-            <div class="form-group col-2">Ação</div>
         </div>
         <div>
             @foreach ($solicitacao->missingInfos as $missing_info)

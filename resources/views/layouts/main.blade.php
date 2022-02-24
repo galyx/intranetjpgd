@@ -17,6 +17,17 @@
     .foto i {
       font-size: 80px;
     }
+
+    .main-header {
+      background-color: #0F3A49;
+    }
+    .main-header a {
+      color: #fff !important;
+    }
+
+    .main-footer {
+      background-color: #191717;
+    }
   </style>
 </head>
 <body class="hold-transition layout-top-nav layout-navbar-fixed">
@@ -25,9 +36,9 @@
     <!-- Navbar -->
     <nav class="main-header navbar navbar-expand-md navbar-light navbar-white">
       <div class="container">
-        <a href="../../index3.html" class="navbar-brand">
-          {{-- <img src="../../dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8"> --}}
-          <span class="brand-text font-weight-light">Despachante JPG</span>
+        <a href="/" class="navbar-brand">
+          <img src="{{asset('imgs/Logo-jpg-branca.png')}}" alt="JPG Despachante Logo" height="70px" style="opacity: .8">
+          {{-- <span class="brand-text font-weight-light">Despachante JPG</span> --}}
         </a>
   
         <button class="navbar-toggler order-1" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,7 +89,7 @@
     <!-- Main Footer -->
     <footer class="main-footer">
       <!-- Default to the left -->
-      <strong>&copy; {{date('Y')}} Desenvolvido pela <a href="https://agenciaweb7.com.br">Agencia Web7</a>.</strong> Todos os Direitos Reservados.
+      <strong>JPG Despachante {{date('Y')}} &copy; Desenvolvido por <a href="https://agenciaweb7.com.br">Agência Web7</a></strong>
     </footer>
   </div>
   <!-- ./wrapper -->

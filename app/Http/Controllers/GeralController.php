@@ -38,10 +38,9 @@ class GeralController extends Controller
     public function solicitacoesUpdate(Request $request)
     {
         \Log::info($request->all());
-        Solicitacao::find($request->solicitacao_id)->update([
-            'despachante_observacao' => $request->despachante_observacao,
-            'valor_orcamento' => $request->total_value,
-        ]);
+        $solicitacao_update['despachante_observacao'] = $request->despachante_observacao;
+        if(isset($request->total_value))$solicitacao_update['valor_orcamento'] = $request->total_value;
+        Solicitacao::find($request->solicitacao_id)->update($solicitacao_update);
 
         if(isset($request->itens)){
             foreach(array_chunk($request->itens,2) as $item){
