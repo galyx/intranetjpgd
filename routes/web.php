@@ -18,7 +18,7 @@ use App\Http\Controllers\Auth\LoginController;
 Route::post('/cep-busca',[GeralController::class, 'cepBusca']);
 
 Route::get('/artisan-fun', function(){
-    $artisan = \Artisan::call('migrate');
+    $artisan = \Artisan::call('storage:link');
     dd($artisan);
 });
 
