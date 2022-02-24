@@ -11,6 +11,13 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{asset('plugins/adminlte/css/adminlte.min.css')}}">
+  <link rel="stylesheet" href="{{asset('plugins/jquery-ui-1.13.0/jquery-ui.min.css')}}" />
+
+  <style>
+    .foto i {
+      font-size: 80px;
+    }
+  </style>
 </head>
 <body class="hold-transition layout-top-nav layout-navbar-fixed">
   <!-- Site wrapper -->
@@ -39,9 +46,11 @@
             <li class="nav-item">
               <a href="{{route('nova-solicitacao')}}" class="nav-link">Nova Solicitação</a>
             </li>
-            <li class="nav-item">
-              <a href="{{route('lojistas')}}" class="nav-link">Lojistas</a>
-            </li>
+            @if (auth()->user()->permission == 10)
+              <li class="nav-item">
+                <a href="{{route('lojistas')}}" class="nav-link">Lojistas</a>
+              </li>
+            @endif
             <li class="nav-item">
               <a href="{{route('clientes')}}" class="nav-link">Clientes</a>
             </li>
@@ -74,7 +83,7 @@
   </div>
   <!-- ./wrapper -->
 
-  <form id="logout-form" action="#" method="POST" style="display: none;">
+  <form id="logout-form" action="{{route('logout')}}" method="POST" style="display: none;">
     @csrf
   </form>
 
@@ -86,11 +95,23 @@
   <script src="{{asset('plugins/bootstrap-4.6.1-dist/js/bootstrap.bundle.min.js')}}"></script>
   <!-- AdminLTE App -->
   <script src="{{asset('plugins/adminlte/js/adminlte.min.js')}}"></script>
+  <script src="{{asset('plugins/jquery-ui-1.13.0/jquery-ui.min.js')}}"></script>
   <script src="{{asset('plugins/valida_cpf_cnpj.js')}}"></script>
   <script src="{{asset('plugins/mask.jquery.js')}}"></script>
   <script src="{{asset('plugins/mask.money.js')}}"></script>
   <script src="{{asset('js/script.min.js')}}"></script>
+  <script>
+    $(document).ready(function(){
+      if(`{{session()->has('success')}}`){
+        Swal.fire({
+          icon: 'success',
+          title: `{{session()->get('success')}}`
+        });
+      }
+    });
+  </script>
   <!-- AdminLTE for demo purposes -->
   {{-- <script src="{{asset('adminlte/js/demo.js')}}"></script> --}}
+  @yield('script')
 </body>
 </html>

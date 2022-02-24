@@ -5,6 +5,15 @@ $(document).ready(function() {
         }
     });
 
+    let ext_icon = {
+        'pdf': `<i class="fa-solid fa-file-pdf"></i>`,
+        'doc': `<i class="fa-solid fa-file-lines"></i>`,
+        'docx': `<i class="fa-solid fa-file-lines"></i>`,
+        'csv': `<i class="fa-solid fa-file-csv"></i>`,
+        'xlsx': `<i class="fa-solid fa-file-excel"></i>`,
+        'xls': `<i class="fa-solid fa-file-excel"></i>`,
+    };
+
     $('.real').maskMoney({precision: 2, decimal:',', thousands: ''});
 
     $('[name="postal_code"]').mask('00000-000');
@@ -90,11 +99,35 @@ $(document).ready(function() {
         $('.real').maskMoney({precision: 2, decimal:',', thousands: ''});
 
         var total_height = 0;
-        $(this).closest('.modal-body').children('div').each(function () {
+        $(this).closest('form').children('div').each(function () {
             total_height += $(this).height();
         });
 
         $(this).closest('.modal-body').scrollTop(total_height);
+    });
+    $(document).on('click', '.btn-add-missings', function(){
+        $('#missings').append(`
+            <div class="row item">
+                <div class="form-group col-6">
+                    <input type="text" class="form-control form-control-sm" name="missing_infos[]">
+                </div>
+                <div class="form-group col-4">
+                    <input type="text" class="form-control form-control-sm" name="missing_infos[]">
+                </div>
+                <div class="form-group col-2">
+                    <button type="button" class="btn btn-sm btn-block btn-danger btn-remove-itens"><i class="fa-solid fa-times"></i></button>
+                </div>
+            </div>
+        `);
+
+        $('.real').maskMoney({precision: 2, decimal:',', thousands: ''});
+
+        // var total_height = 0;
+        // $(this).closest('form').children('div').each(function () {
+        //     total_height += $(this).height();
+        // });
+
+        // $(this).closest('.modal-body').scrollTop(total_height);
     });
     $(document).on('click', '.btn-remove-itens', function () {
         $(this).closest('.item').remove();
@@ -113,5 +146,226 @@ $(document).ready(function() {
         });
         $('[name="total_value"]').val(valor_total.toFixed(2));
         $('.valor-total').html(`R$ ${valor_total.toFixed(2).toString().replace('.',',')}`);
+    });
+
+    $(document).on('keyup focus', '[data-autocomplete="true"]', function(){
+        var thiss = $(this);
+        var tabela = $(this).data('tabela');
+        var auto_preenchimento = $(this).data('auto_preenchimento');
+
+        $.ajax({
+            url: '/busca-tabela-ui',
+            type: 'POST',
+            data: {tabela: tabela, nome: thiss.val()},
+            success: (data) => {
+                thiss.autocomplete({
+                    source: data,
+                    select: (event, ui) => {
+                        if(auto_preenchimento == 'sim'){
+                            $.ajax({
+                                url: '/busca-tabela-preechimento',
+                                type: 'POST',
+                                data: {tabela: tabela, id: ui.item.value},
+                                success: (data) => {
+                                    // console.log(data);
+                                    $.each(data, (key, value)=>{
+                                        thiss.closest('.row').find(`[name="${key}"]`).val(value);
+                                    });
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        });
+    });
+
+    // Adicionando imagem
+    var html_foto = '';
+    $(document).on('click', '.btn-add-foto', function(e){
+        html_foto = $(this).parent().clone();
+        $(this).parent().find('.add-foto').trigger('click');
+    });
+    $(document).on('change', '.add-foto', function(){
+        $(this).removeClass('add-foto');
+
+        $(this).parent().find('.btn-add-foto').removeClass('btn-primary btn-add-foto').addClass('btn-danger btn-remove-foto').html('x');
+
+        // $(this).parent().parent().append(
+        //     '<div class="col-6 col-md-3 mb-2">'+
+        //         '<button type="button" class="btn btn-primary btn-add-foto">+</button>'+
+        //         '<input type="file" class="d-none add-foto" name="foto[]">'+
+        //         '<div class="foto"></div>'+
+        //     '</div>'
+        // );
+
+        $(this).parent().parent().append(html_foto);
+
+        var form_img = $(this).parent();
+
+        var preview = form_img.find('.foto');
+        var files   = $(this).prop('files');
+
+        function readAndPreview(file) {
+            // Make sure `file.name` matches our extensions criteria
+            if ( /\.(jpe?g|png|gif)$/i.test(file.name) ) {
+                var reader = new FileReader();
+
+                reader.addEventListener("load", function () {
+                    // var image = new Image();
+                    // image.classList = 'rounded img-fluid';
+                    // image.height = 180;
+                    // image.title = file.name;
+                    // image.src = this.result;
+                    // preview.append( image );
+                    preview.css({
+                        'background-image': `url('${this.result}')`,
+                        'width': '100px',
+                        'height': '100px',
+                        'background-repeat': 'no-repeat',
+                        'background-position': 'center',
+                        'background-size': 'contain',
+                        'margin-top': '10px',
+                    });
+                }, false);
+
+                reader.readAsDataURL(file);
+            }else{
+                var ext = file.name.split('.');
+                ext = ext[ext.length - 1];
+                preview.html(ext_icon[ext]).css({
+                    'width': '100px',
+                    'height': '100px',
+                    'margin-top': '10px',
+                });
+            }
+        }
+
+        if (files) {
+            [].forEach.call(files, readAndPreview);
+        }
+    });
+    $(document).on('click', '.btn-remove-foto', function(){
+        $(this).parent().remove();
+    });
+
+    $(document).on('click', '.btn-altera-status', function(e) {
+        var btn = $(this);
+        var btn_status = $(this).attr('data-status');
+        btn.closest('tr').find('.status').html((btn_status == 1 ? `<span class="text-danger">INATIVO</span>` : `<span class="text-success">ATIVO</span>`));
+        btn.html((btn_status == 1 ? `Ativar` : `Desativar`));
+        if(btn_status == 1) {
+            btn.removeClass('btn-warning').addClass('btn-success');
+        }else{
+            btn.removeClass('btn-success').addClass('btn-warning');
+        }
+        btn.attr('data-status', (btn_status == 1 ? 0 : 1));
+
+        $.ajax({
+            url: btn.data('href'),
+            type: 'POST',
+            data: {table: btn.data('table'), id: btn.data('id'), status: (btn_status == 1 ? 0 : 1)},
+            success: (data) => {
+                // console.log(data);
+            }
+        });
+    });
+
+    $(document).on('click', '.btn-delete', function(){
+        $.ajax({
+            url: $(this).data('href'),
+            type: 'POST',
+            data: {table: $(this).data('table'), id: $(this).data('id')},
+            success: (data) => {
+                window.location.reload();
+            }
+        });
+    });
+
+    $(document).on('click', '.btn-editar', function(e) {
+        $($(this).data('target')).modal('show');
+
+        $.ajax({
+            url: $(this).data('href'),
+            type: 'POST',
+            data: {table: $(this).data('table'), id: $(this).data('id')},
+            success: (data) => {
+                $($(this).data('target')).find('.modal-body').html(data);
+                $('.real').maskMoney({precision: 2, decimal:',', thousands: ''});
+            }
+        });
+    });
+
+    // Btn para salvar
+    $(document).on('click', '.btn-save', function(e) {
+        e.preventDefault();
+        var btn = $(this);
+        var btnText = $(this).html();
+        var route = $(this).closest('.modal').find('form').attr('action');
+        var target = $(this).closest('.modal').find('form');
+
+        var form_dados = new FormData(target[0]);
+
+        btn.html('<div class="spinner-border text-light" role="status"></div>');
+        btn.prop('disabled', true);
+        target.find('input').prop('disabled', true);
+        target.find('.invalid-feedbeck').remove();
+
+        $.ajax({
+            url: route,
+            type: 'POST',
+            data: form_dados,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: (data) => {
+                // console.log(data);
+
+                btn.html(btnText);
+                btn.prop('disabled', false);
+                target.find('input').prop('disabled', false);
+
+                if(data[0] == 'success') {
+                    switch(data[1]){
+                        case 'local':
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Dados atualizados com sucesso!'
+                            });
+
+                            target.closest('.modal').modal('hide');
+                        break;
+                        case 'redirect':
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Dados atualizados com sucesso!'
+                            });
+
+                            setTimeout(() => {window.location.href = data[2]}, 1400);
+                        break;
+                    }
+                }
+            },
+            error: (err) => {
+                // console.log(err);
+                var errors = err.responseJSON.errors;
+
+                btn.html(btnText);
+                btn.prop('disabled', false);
+                target.find('input').prop('disabled', false);
+
+                if (errors) {
+                    // console.log(errors);
+                    $.each(errors, (key, value) => {
+                        target.find('[name="' + key + '"]').parent().append('<span class="invalid-feedbeck">' + value[0] + '</span>');
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: err.responseJSON.invalid
+                    });
+                }
+            }
+        });
     });
 });

@@ -3,9 +3,6 @@
 @section('container')
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
-        
-        <!-- /.content-header -->
-
         <!-- Main content -->
         <div class="content">
             <div class="container">
@@ -28,27 +25,27 @@
                                                 <th>Renavam</th>
                                                 <th>Ano Fab./Ano Mod.</th>
                                                 <th>Marca Modelo</th>
-                                                <th>Status</th>
                                                 <th>Ações</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>#00001</td>
-                                                <td>00000000000</td>
-                                                <td>2011/2012</td>
-                                                <td>Fiat / Uno Way 1.0</td>
-                                                <td>Ativo</td>
-                                                <td>
-                                                    <div class="btn-group">
-                                                        <button type="button" class="btn btn-info">Alterar</button>
-                                                        <button type="button" class="btn btn-warning">Desativar</button>
-                                                        <button type="button" class="btn btn-danger">Excluir</button>
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                            @foreach ($veiculos as $veiculo)
+                                                <tr>
+                                                    <td>#{{\Str::padLeft($veiculo->id, 6, '0')}}</td>
+                                                    <td>{{$veiculo->renavam}}</td>
+                                                    <td>{{$veiculo->year_fab_mod}}</td>
+                                                    <td>{{$veiculo->brand_model}}</td>
+                                                    <td>
+                                                        <div class="btn-group">
+                                                            <button type="button" class="btn btn-info btn-editar" data-href="{{route('buscaDadosGerais')}}" data-id="{{$veiculo->id}}" data-table="veiculo" data-target="#alteraDatas">Alterar</button>
+                                                            <button type="button" class="btn btn-danger btn-delete" data-href="{{route('destroyData.post')}}" data-table="veiculo" data-id="{{$veiculo->id}}">Excluir</button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
+                                    <div class="mt-3">{{$veiculos->links()}}</div>
                                 </div>
                             </div>
                         </div>
@@ -71,33 +68,78 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="row">
-                        <div class="form-group col-12"><h2>Dados do Veiculo</h2></div>
-                        <div class="form-group col-12 col-sm-4">
-                            <label for="renavam">Renavam</label>
-                            <input type="text" class="form-control form-control-sm" name="renavam">
+                    <form action="{{route('veiculos.post')}}" method="post">
+                        <div class="row">
+                            @if (auth()->user()->permission == 10)
+                                <div class="form-group col-12">
+                                    <label for="">Lojista Relacionado</label>
+                                    <select name="lojista_id" class="form-control form-control-sm">
+                                        <option value="">Selecione um Lojista</option>
+                                        @foreach (\App\Models\User::where('permission', 0)->where('status', 1)->get() as $user)
+                                            <option value="{{$user->id}}">{{$user->userData->razao_social}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            @else
+                                <input type="hidden" name="lojista_id" value="{{auth()->user()->id}}">
+                            @endif
+
+                            <div class="form-group col-12 col-sm-4">
+                                <label for="renavam">Renavam</label>
+                                <input type="text" class="form-control form-control-sm" name="renavam">
+                            </div>
+                            <div class="form-group col-12 col-sm-4">
+                                <label for="plate_car">Placa</label>
+                                <input type="text" class="form-control form-control-sm" name="plate_car">
+                            </div>
+                            <div class="form-group col-12 col-sm-4">
+                                <label for="color_car">Cor do Veiculo</label>
+                                <input type="text" class="form-control form-control-sm" name="color_car">
+                            </div>
+                            <div class="form-group col-12 col-sm-4">
+                                <label for="year_fab_mod">Ano Fab./Ano Mod.</label>
+                                <input type="text" class="form-control form-control-sm" name="year_fab_mod">
+                            </div>
+                            <div class="form-group col-12 col-sm-4">
+                                <label for="brand_model">Marca/Modelo</label>
+                                <input type="text" class="form-control form-control-sm" name="brand_model">
+                            </div>
                         </div>
-                        <div class="form-group col-12 col-sm-4">
-                            <label for="plate_car">Placa</label>
-                            <input type="text" class="form-control form-control-sm" name="plate_car">
+
+                        <div class="mt-3"><h4>Anexos</h4></div>
+                        <div class="row">
+                            <div class="col-6 col-md-3 mb-2">
+                                <button type="button" class="btn btn-primary btn-add-foto">+</button>
+                                <input type="file" name="foto[]" class="d-none add-foto">
+                                <div class="foto"></div>
+                            </div>
                         </div>
-                        <div class="form-group col-12 col-sm-4">
-                            <label for="color_car">Cor do Veiculo</label>
-                            <input type="text" class="form-control form-control-sm" name="color_car">
-                        </div>
-                        <div class="form-group col-12 col-sm-4">
-                            <label for="year_fab_mod">Ano Fab./Ano Mod.</label>
-                            <input type="text" class="form-control form-control-sm" name="year_fab_mod">
-                        </div>
-                        <div class="form-group col-12 col-sm-4">
-                            <label for="brand_model">Marca/Modelo</label>
-                            <input type="text" class="form-control form-control-sm" name="brand_model">
-                        </div>
-                    </div>
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                    <button type="button" class="btn btn-primary">Salvar Alterações</button>
+                    <button type="button" class="btn btn-primary btn-save">Salvar Alterações</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="alteraDatas" tabindex="-1" aria-labelledby="alteraDatasLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="alteraDatasLabel">Alterar Cliente</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Carregando...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary btn-save">Salvar Alterações</button>
                 </div>
             </div>
         </div>

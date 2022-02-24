@@ -30,21 +30,31 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>#00001</td>
-                                                <td>Carrão Sul</td>
-                                                <td>João da Silva</td>
-                                                <td>Fiat Uno Way</td>
-                                                <td>16/02/2022</td>
-                                                <td>Analise</td>
-                                                <td>
-                                                    <div class="btn-group">
-                                                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#conferirSolicitacao">Conferir</button>
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                            @foreach ($solicitacoes as $solicitacao)
+                                                <tr>
+                                                    <td>#{{\Str::padLeft($solicitacao->id, 6, '0')}}</td>
+                                                    <td>{{$solicitacao->lojista->userData->razao_social}}</td>
+                                                    <td>{{$solicitacao->client->full_name}}</td>
+                                                    <td>{{$solicitacao->veiculo->brand_model}}</td>
+                                                    <td>{{date('d/m/Y', strtotime($solicitacao->created_at))}}</td>
+                                                    <td>
+                                                        @if ($solicitacao->status == '0')
+                                                            <span class="text-warning">Analise</span>
+                                                        @else
+                                                            <span class="text-success">Finalizado</span>
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        <div class="btn-group">
+                                                            <button type="button" class="btn btn-info btn-editar" data-href="{{route('buscaDadosGerais')}}" data-id="{{$solicitacao->id}}" data-table="solicitacao" data-target="#conferirSolicitacao">Conferir</button>
+                                                            <a href="{{route('editar-solicitacao', $solicitacao->id)}}" class="btn btn-primary">Editar</a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
+                                    <div class="mt-3">{{$solicitacoes->links()}}</div>
                                 </div>
                             </div>
                         </div>
@@ -67,111 +77,14 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="row">
-                        <div class="col-12 mb-2"><h2>Lojista</h2></div>
-                        <div class="col-12 col-sm-6 py-2 px-1">
-                            <span>Loja:</span>
-                            <div class="border-bottom">Carrão sul - #00001</div>
-                        </div>
-                        <div class="col-12 col-sm-6 py-2 px-1">
-                            <span>Encarregado da Loja:</span>
-                            <div class="border-bottom">Amarildo</div>
-                        </div>
-                        <div class="col-12 col-sm-12 py-2 px-1">
-                            <span>Endereço:</span>
-                            <div class="border-bottom">Rua Jerico, 212 - Emiliano - Cutiba/PR</div>
-                        </div>
-                    </div>
-                    <div class="row mt-3">
-                        <div class="form-group col-12"><h2>Cliente</h2></div>
-                        <div class="col-12 col-sm-3 py-2 px-1">
-                            <span>Documento CPF:</span>
-                            <div class="border-bottom">000.000.000-00</div>
-                        </div>
-                        <div class="col-12 col-sm-6 py-2 px-1">
-                            <span>Nome:</span>
-                            <div class="border-bottom">João da Silva</div>
-                        </div>
-                        <div class="col-12 col-sm-3 py-2 px-1">
-                            <span>Document RG:</span>
-                            <div class="border-bottom">00000000</div>
-                        </div>
-                        <div class="col-12 col-sm-6 py-2 px-1">
-                            <span>Telefone/Celular:</span>
-                            <div class="border-bottom">(00) 99999-9999/(00) 99999-9999/(00) 3333-3333</div>
-                        </div>
-                        <div class="col-12 col-sm-6 py-2 px-1">
-                            <span>Endereço:</span>
-                            <div class="border-bottom">Rua Jerico, 212 - Emiliano - Cutiba/PR - 80000-000</div>
-                        </div>
-                        <div class="col-12 col-sm-3 py-2 px-1">
-                            <span>Complemento:</span>
-                            <div class="border-bottom">Casa 002</div>
-                        </div>
-                    </div>
-                    <div class="row mt-3">
-                        <div class="form-group col-12"><h2>Veiculo</h2></div>
-                        <div class="col-12 col-sm-4 py-2 px-1">
-                            <span>Renavam:</span>
-                            <div class="border-bottom">00000000000</div>
-                        </div>
-                        <div class="col-12 col-sm-4 py-2 px-1">
-                            <span>Placa:</span>
-                            <div class="border-bottom">AAA-0A00</div>
-                        </div>
-                        <div class="col-12 col-sm-4 py-2 px-1">
-                            <span>Cor do Veiculo:</span>
-                            <div class="border-bottom">Verde Claro</div>
-                        </div>
-                        <div class="col-12 col-sm-4 py-2 px-1">
-                            <span>Ano Fab./Ano Mod.:</span>
-                            <div class="border-bottom">2011/2012</div>
-                        </div>
-                        <div class="col-12 col-sm-4 py-2 px-1">
-                            <span>Marca/Modelo:</span>
-                            <div class="border-bottom">Fiat / Uno Way 1.0</div>
-                        </div>
-                        <div class="col-12 col-sm-6 py-2 px-1">
-                            <span>Aquisição de Veiculos com Gravame:</span>
-                            <div class="border-bottom">Simples</div>
-                        </div>
-                        <div class="col-12 col-sm-6 py-2 px-1">
-                            <span>Compra com Troca de Município:</span>
-                            <div class="border-bottom">Simples</div>
-                        </div>
-                    </div>
-                    <div class="row mt-3">
-                        <div class="form-group col-12"><h2>Orçamento</h2></div>
-                        <div class="form-group col-6">Item</div>
-                        <div class="form-group col-4">Valor</div>
-                        <div class="form-group col-2">Ação</div>
-                    </div>
-                    <div id="itens">
-                        <div class="row item">
-                            <div class="form-group col-6">
-                                <input type="text" class="form-control form-control-sm" name="itens[]">
-                            </div>
-                            <div class="form-group col-4">
-                                <input type="text" class="form-control form-control-sm real valor-item" name="itens[]">
-                            </div>
-                            <div class="form-group col-2">
-                                <button type="button" class="btn btn-sm btn-block btn-danger btn-remove-itens"><i class="fa-solid fa-times"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-8">Total:</div>
-                        <div class="form-group col-4">
-                            <input type="hidden" name="total_value">
-                            <span class="valor-total">R$ 0,00</span>
-                        </div>
-                    </div>
-                    <div><button type="button" class="btn btn-sm btn-primary btn-add-itens">Adicionar Item</button></div>
+                    Carregando...
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                    <button type="button" class="btn btn-success">Finalizar Solicitação</button>
-                    <button type="button" class="btn btn-primary">Salvar Alterações</button>
+                    @if (auth()->user()->permission == 10)
+                        <button type="button" class="btn btn-success btn-finalizar-solicitacao">Finalizar Solicitação</button>
+                        <button type="button" class="btn btn-primary btn-save">Salvar Alterações</button>
+                    @endif
                 </div>
             </div>
         </div>
