@@ -171,4 +171,17 @@
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
+    <input type="hidden" class="erros_input" value="{{session()->get('errors')}}">
+@endsection
+
+@section('script')
+    <script>
+        $(document).ready(function(){
+            if($('.erros_input').val()){
+                $.each(JSON.parse($('.erros_input').val()), (key, value) => {
+                    $('form').find('[name="' + key + '"]').addClass('is-invalid').parent().append('<span class="invalid-feedback">' + value[0] + '</span>');
+                });
+            }
+        });
+    </script>
 @endsection

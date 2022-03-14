@@ -121,11 +121,50 @@ class GeralController extends Controller
 
     public function novaSolicitacao()
     {
+        // dd(session()->get('errors'));
         return view('novaSolicitacao');
     }
 
     public function novaSolicitacaoPost(Request $request)
     {
+        $rules = [
+            'lojista_id' => 'required|string',
+            'document_number' => 'required|string',
+            'full_name' => 'required|string',
+            'phone1' => 'required|string',
+            'postal_code' => 'required|string',
+            'address' => 'required|string',
+            'home_number' => 'required|string',
+            'address2' => 'required|string',
+            'city' => 'required|string',
+            'state' => 'required|string',
+            'renavam' => 'required|string',
+            'plate_car' => 'required|string',
+            'color_car' => 'required|string',
+            'year_fab_mod' => 'required|string',
+            'brand_model' => 'required|string',
+        ];
+
+        $customMessages = [
+            'lojista_id.required' => 'O campo Lojista é obrigatório!',
+            'document_number.required' => 'O campo Documento é obrigatório!',
+            'full_name.required' => 'O campo Nome Completo é obrigatório!',
+            'phone1.required' => 'O campo Telefone/Celular 1 é obrigatório!',
+            'postal_code.required' => 'O campo CEP é obrigatório!',
+            'address.required' => 'O campo Rua/Endereço é obrigatório!',
+            'home_number.required' => 'O campo Numero é obrigatório!',
+            'address2.required' => 'O campo Bairro é obrigatório!',
+            'city.required' => 'O campo Cidade é obrigatório!',
+            'state.required' => 'O campo Estado é obrigatório!',
+            'renavam.required' => 'O campo Renavam é obrigatório!',
+            'plate_car.required' => 'O campo Placa é obrigatório!',
+            'color_car.required' => 'O campo Cor do Veiculo é obrigatório!',
+            'year_fab_mod.required' => 'O campo Ano Fab./Ano Mod. é obrigatório!',
+            'brand_model.required' => 'O campo Marca/Modelo é obrigatório!',
+        ];
+
+        $this->validate($request, $rules, $customMessages);
+
         $client_id = $this->saveClient($request);
         $veiculo_id = $this->saveVeiculo($request);
         $solicitacao = Solicitacao::create([
@@ -149,6 +188,44 @@ class GeralController extends Controller
 
     public function editarSolicitacaoPost(Request $request)
     {
+        $rules = [
+            'lojista_id' => 'required|string',
+            'document_number' => 'required|string',
+            'full_name' => 'required|string',
+            'phone1' => 'required|string',
+            'postal_code' => 'required|string',
+            'address' => 'required|string',
+            'home_number' => 'required|string',
+            'address2' => 'required|string',
+            'city' => 'required|string',
+            'state' => 'required|string',
+            'renavam' => 'required|string',
+            'plate_car' => 'required|string',
+            'color_car' => 'required|string',
+            'year_fab_mod' => 'required|string',
+            'brand_model' => 'required|string',
+        ];
+
+        $customMessages = [
+            'lojista_id.required' => 'O campo Lojista é obrigatório!',
+            'document_number.required' => 'O campo Documento é obrigatório!',
+            'full_name.required' => 'O campo Nome Completo é obrigatório!',
+            'phone1.required' => 'O campo Telefone/Celular 1 é obrigatório!',
+            'postal_code.required' => 'O campo CEP é obrigatório!',
+            'address.required' => 'O campo Rua/Endereço é obrigatório!',
+            'home_number.required' => 'O campo Numero é obrigatório!',
+            'address2.required' => 'O campo Bairro é obrigatório!',
+            'city.required' => 'O campo Cidade é obrigatório!',
+            'state.required' => 'O campo Estado é obrigatório!',
+            'renavam.required' => 'O campo Renavam é obrigatório!',
+            'plate_car.required' => 'O campo Placa é obrigatório!',
+            'color_car.required' => 'O campo Cor do Veiculo é obrigatório!',
+            'year_fab_mod.required' => 'O campo Ano Fab./Ano Mod. é obrigatório!',
+            'brand_model.required' => 'O campo Marca/Modelo é obrigatório!',
+        ];
+
+        $this->validate($request, $rules, $customMessages);
+
         $client_id = $this->saveClient($request);
         $veiculo_id = $this->saveVeiculo($request);
         Solicitacao::find($request->solicitacao_id)->update([

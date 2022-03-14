@@ -48,6 +48,6 @@ class Solicitacao extends Model
 
     public function veiculo()
     {
-        return $this->hasOne(veiculo::class, 'id', 'veiculo_id');
+        return $this->hasOne(Veiculo::class, 'id', 'veiculo_id');
     }
 }

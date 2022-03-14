@@ -308,8 +308,8 @@ $(document).ready(function() {
 
         btn.html('<div class="spinner-border text-light" role="status"></div>');
         btn.prop('disabled', true);
-        target.find('input').prop('disabled', true);
-        target.find('.invalid-feedbeck').remove();
+        target.find('input').prop('disabled', true).removeClass('is-invalid');
+        target.find('.invalid-feedback').remove();
 
         $.ajax({
             url: route,
@@ -357,7 +357,7 @@ $(document).ready(function() {
                 if (errors) {
                     // console.log(errors);
                     $.each(errors, (key, value) => {
-                        target.find('[name="' + key + '"]').parent().append('<span class="invalid-feedbeck">' + value[0] + '</span>');
+                        target.find('[name="' + key + '"]').addClass('is-invalid').parent().append('<span class="invalid-feedback">' + value[0] + '</span>');
                     });
                 } else {
                     Swal.fire({
