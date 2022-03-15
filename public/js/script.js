@@ -311,7 +311,7 @@ $(document).ready(function() {
             type: 'POST',
             data: {table: $(this).data('table'), id: $(this).data('id')},
             success: (data) => {
-                $($(this).data('target')).find('.modal-body').html(data);
+                $($(this).data('target')).find('.modal-body').html(data.view);
                 $('.real').maskMoney({precision: 2, decimal:',', thousands: ''});
             }
         });
@@ -386,6 +386,24 @@ $(document).ready(function() {
                         title: err.responseJSON.invalid
                     });
                 }
+            }
+        });
+    });
+
+    $(document).on('click', '.btn-href', function(e) {
+        e.preventDefault();
+        window.open($(this).attr('href')+'/'+$('[name="solicitacao_id"]').val(),'_blank');
+    });
+
+    $(document).on('click', '.btn-finalizar-solicitacao', function(e) {
+        $.ajax({
+            url: $(this).data('href'),
+            type: 'POST',
+            data: {os_id: $('[name="solicitacao_id"]').val()},
+            success: data => {
+                // console.log(data);
+                window.open(data,'_blank');
+                window.location.reload();
             }
         });
     });

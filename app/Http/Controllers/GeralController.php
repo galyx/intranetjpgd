@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Client;
 use App\Models\Veiculo;
 use App\Models\UserData;
+use Barryvdh\DomPDF\PDF;
 use App\Models\Orcamento;
 use App\Models\ClientFoto;
 use App\Mail\ShippingInfos;
@@ -14,6 +15,7 @@ use App\Models\Solicitacao;
 use App\Models\VeiculoFoto;
 use Illuminate\Http\Request;
 use App\Models\DocumentImage;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
@@ -237,6 +239,12 @@ class GeralController extends Controller
         return redirect()->route('solicitacoes')->with('success', 'Sua solicitação foi atualizada com successo!');
     }
 
+    public function solicitacaoFinalizar(Request $request)
+    {
+        Solicitacao::find($request->os_id)->update(['status' => 1]);
+        return response()->json(route('imprimirOS', $request->os_id));
+    }
+
     public function lojista()
     {
         $users = User::with(['userData'])->where('permission', 0)->paginate('20');
@@ -441,10 +449,12 @@ class GeralController extends Controller
             case 'user':
                 $user = User::with('userData')->find($request->id);
                 $return = view('components.modalLojista', get_defined_vars())->render();
+                $data = $user;
                 break;
             case 'client':
                 $client = Client::with('fotos')->find($request->id);
                 $return = view('components.modalClient', get_defined_vars())->render();
+                $data = $client;
                 break;
             case 'veiculo':
                 $veiculo = Veiculo::with('fotos')->find($request->id);
@@ -453,10 +463,11 @@ class GeralController extends Controller
             case 'solicitacao':
                 $solicitacao = Solicitacao::with('lojista', 'client', 'veiculo')->find($request->id);
                 $return = view('components.modalConferiSolicitacao', get_defined_vars())->render();
+                $data = $solicitacao;
                 break;
         }
 
-        return response()->json($return,200);
+        return response()->json(['view' => $return, 'data' => $data],200);
     }
 
     public function buscaTabelaUi(Request $request)
@@ -493,6 +504,25 @@ class GeralController extends Controller
         }
 
         return response()->json($data,200);
+    }
+
+    // ------------------------------
+    public function imprimirOS($id)
+    {
+        $solicitacao = Solicitacao::find($id);
+        $html_solicitacao = view('components.htmlPdfSolicitacao', get_defined_vars())->render();
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->loadHTML($html_solicitacao);
+        return $pdf->stream();
+    }
+    // ------------------------------
+    public function imprimirReciboOS($id)
+    {
+        $solicitacao = Solicitacao::find($id);
+        $html_solicitacao = view('components.htmlPdfRecibo', get_defined_vars())->render();
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->loadHTML($html_solicitacao);
+        return $pdf->stream();
     }
 
     // ------------------------------

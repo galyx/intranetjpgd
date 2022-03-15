@@ -298,3 +298,13 @@
         </div>
     @endif
 </form>
+
+@if ($solicitacao->status == 1)
+    <script>
+        document.querySelector('.btn-finalizar-solicitacao').classList.add('d-none');
+    </script>
+@else
+    <script>
+        document.querySelector('.btn-finalizar-solicitacao').classList.remove('d-none');
+    </script>
+@endif

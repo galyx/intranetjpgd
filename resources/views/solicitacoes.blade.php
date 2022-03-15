@@ -82,7 +82,9 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
                     @if (auth()->user()->permission == 10)
-                        <button type="button" class="btn btn-success btn-finalizar-solicitacao">Finalizar Solicitação</button>
+                        <a href="{{route('imprimirOS')}}" class="btn btn-info btn-href">Imprimir OS</a>
+                        <a href="{{route('imprimirReciboOS')}}" class="btn btn-info btn-href">Gerar Recibo da OS</a>
+                        <button type="button" class="btn btn-success btn-finalizar-solicitacao" data-href="{{route('solicitacaoFinalizar')}}">Finalizar Solicitação</button>
                         <button type="button" class="btn btn-primary btn-save">Salvar Alterações</button>
                     @endif
                 </div>

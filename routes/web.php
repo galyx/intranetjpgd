@@ -26,6 +26,7 @@ Route::middleware(['auth:web'])->group(function(){
     Route::get('/',[GeralController::class, 'solicitacoes'])->name('home');
     Route::get('/solicitacoes',[GeralController::class, 'solicitacoes'])->name('solicitacoes');
     Route::post('/solicitacoes-update',[GeralController::class, 'solicitacoesUpdate'])->name('solicitacoes.update');
+    Route::post('/solicitacao-finalizar',[GeralController::class, 'solicitacaoFinalizar'])->name('solicitacaoFinalizar');
 
     Route::get('/nova-solicitacao',[GeralController::class, 'novaSolicitacao'])->name('nova-solicitacao');
     Route::post('/nova-solicitacao-post',[GeralController::class, 'novaSolicitacaoPost'])->name('nova-solicitacao.post');
@@ -48,6 +49,9 @@ Route::middleware(['auth:web'])->group(function(){
 
     Route::post('/busca-tabela-ui',[GeralController::class, 'buscaTabelaUi'])->name('buscaTabelaUi');
     Route::post('/busca-tabela-preechimento',[GeralController::class, 'buscaTabelaPreenchimento'])->name('buscaTabelaPreenchimento');
+
+    Route::get('/imprimirOS/{id?}', [GeralController::class, 'imprimirOS'])->name('imprimirOS');
+    Route::get('/imprimirReciboOS/{id?}', [GeralController::class, 'imprimirReciboOS'])->name('imprimirReciboOS');
 });
 
 Route::post('/logout',  [LoginController::class, 'logout'])->name('logout');
