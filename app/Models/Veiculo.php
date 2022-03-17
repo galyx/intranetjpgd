@@ -11,11 +11,13 @@ class Veiculo extends Model
 
     protected $fillable = [
         'lojista_id',
+        'particular',
         'renavam',
         'plate_car',
         'color_car',
         'year_fab_mod',
         'brand_model',
+        'chassi_car',
     ];
 
     public function fotos()

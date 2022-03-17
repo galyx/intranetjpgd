@@ -20,8 +20,6 @@ return new class extends Migration
             $table->integer('veiculo_id');
             $table->longText('observacao')->nullable();
             $table->longText('despachante_observacao')->nullable();
-            $table->string('gravame')->nullable();
-            $table->string('purchase_change_address2')->nullable();
             $table->float('valor_orcamento')->nullable();
             $table->integer('status')->default(0);
             $table->timestamps();

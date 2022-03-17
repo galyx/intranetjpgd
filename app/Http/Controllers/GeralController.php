@@ -116,21 +116,22 @@ class GeralController extends Controller
             }
         }
 
-        Mail::to(Solicitacao::find($request->solicitacao_id)->lojista->email)->send(new ShippingInfos('Caro lojista, informamos que a atualizações na sua solicitação criada! #'.\Str::padLeft($request->solicitacao_id, 6, '0')));
+        if(isset(Solicitacao::find($request->solicitacao_id)->lojista->email)){
+            Mail::to(Solicitacao::find($request->solicitacao_id)->lojista->email)->send(new ShippingInfos('Caro lojista, informamos que a atualizações na sua solicitação criada! #'.\Str::padLeft($request->solicitacao_id, 6, '0')));
+        }
 
         return response()->json(['success', 'redirect', route('solicitacoes')], 200);
     }
 
     public function novaSolicitacao()
     {
-        // dd(session()->get('errors'));
+        // dd(collect(session()->get('_old_input'))->forget('_token'));
         return view('novaSolicitacao');
     }
 
     public function novaSolicitacaoPost(Request $request)
     {
         $rules = [
-            'lojista_id' => 'required|string',
             'document_number' => 'required|string',
             'full_name' => 'required|string',
             'phone1' => 'required|string',
@@ -148,7 +149,6 @@ class GeralController extends Controller
         ];
 
         $customMessages = [
-            'lojista_id.required' => 'O campo Lojista é obrigatório!',
             'document_number.required' => 'O campo Documento é obrigatório!',
             'full_name.required' => 'O campo Nome Completo é obrigatório!',
             'phone1.required' => 'O campo Telefone/Celular 1 é obrigatório!',
@@ -170,15 +170,17 @@ class GeralController extends Controller
         $client_id = $this->saveClient($request);
         $veiculo_id = $this->saveVeiculo($request);
         $solicitacao = Solicitacao::create([
-            'lojista_id' => $request->lojista_id,
+            'lojista_id' => isset($request->particular) ? 0 : $request->lojista_id,
+            'particular' => isset($request->particular) ? 1 : 0,
             'client_id' => $client_id,
             'veiculo_id' => $veiculo_id,
             'observacao' => $request->observacao,
-            'gravame' => $request->gravame,
-            'purchase_change_address2' => $request->purchase_change_address2,
+            'descricao_servicos' => $request->descricao_servicos,
         ]);
 
-        Mail::to('zednetinformatica@gmail.com')->send(new ShippingInfos('Informamos que que o Lojista '.User::find($request->lojista_id)->userData->razao_social.' abriu uma solicitação! #'.\Str::padLeft($solicitacao->id, 6, '0')));
+        if(isset(User::find($request->lojista_id)->userData->razao_social)){
+            Mail::to('zednetinformatica@gmail.com')->send(new ShippingInfos('Informamos que o Lojista '.User::find($request->lojista_id)->userData->razao_social.' abriu uma solicitação! #'.\Str::padLeft($solicitacao->id, 6, '0')));
+        }
         return redirect()->route('solicitacoes')->with('success', 'Sua solicitação foi enviada com successo!');
     }
 
@@ -191,7 +193,6 @@ class GeralController extends Controller
     public function editarSolicitacaoPost(Request $request)
     {
         $rules = [
-            'lojista_id' => 'required|string',
             'document_number' => 'required|string',
             'full_name' => 'required|string',
             'phone1' => 'required|string',
@@ -209,7 +210,6 @@ class GeralController extends Controller
         ];
 
         $customMessages = [
-            'lojista_id.required' => 'O campo Lojista é obrigatório!',
             'document_number.required' => 'O campo Documento é obrigatório!',
             'full_name.required' => 'O campo Nome Completo é obrigatório!',
             'phone1.required' => 'O campo Telefone/Celular 1 é obrigatório!',
@@ -232,8 +232,7 @@ class GeralController extends Controller
         $veiculo_id = $this->saveVeiculo($request);
         Solicitacao::find($request->solicitacao_id)->update([
             'observacao' => $request->observacao,
-            'gravame' => $request->gravame,
-            'purchase_change_address2' => $request->purchase_change_address2,
+            'descricao_servicos' => $request->descricao_servicos,
         ]);
         Mail::to('zednetinformatica@gmail.com')->send(new ShippingInfos('Informamos que que o Lojista '.User::find($request->lojista_id)->userData->razao_social.' fez uma atualização nas informações da solicitação criada! #'.\Str::padLeft($request->solicitacao_id, 6, '0')));
         return redirect()->route('solicitacoes')->with('success', 'Sua solicitação foi atualizada com successo!');
@@ -343,7 +342,6 @@ class GeralController extends Controller
     public function clientePost(Request $request)
     {
         $rules = [
-            'lojista_id' => 'required|string',
             'document_number' => 'required|string',
             'full_name' => 'required|string',
             'phone1' => 'required|string',
@@ -356,9 +354,8 @@ class GeralController extends Controller
         ];
 
         $customMessages = [
-            'lojista_id.required' => 'O campo Nome é obrigatório!',
             'document_number.required' => 'O campo Documento é obrigatório!',
-            'full_name.required' => 'O campo Razão Social é obrigatório!',
+            'full_name.required' => 'O campo Nome Completo é obrigatório!',
             'phone1.required' => 'O campo Telefone/Celular 1 é obrigatório!',
             'postal_code.required' => 'O campo CEP é obrigatório!',
             'address.required' => 'O campo Rua/Endereço é obrigatório!',
@@ -386,21 +383,21 @@ class GeralController extends Controller
     public function veiculoPost(Request $request)
     {
         $rules = [
-            'lojista_id' => 'required|string',
             'renavam' => 'required|string',
             'plate_car' => 'required|string',
             'color_car' => 'required|string',
             'year_fab_mod' => 'required|string',
             'brand_model' => 'required|string',
+            'chassi_car' => 'required|string',
         ];
 
         $customMessages = [
-            'lojista_id.required' => 'O campo Nome é obrigatório!',
-            'renavam.required' => 'O campo Documento é obrigatório!',
-            'plate_car.required' => 'O campo Razão Social é obrigatório!',
-            'color_car.required' => 'O campo Telefone/Celular 1 é obrigatório!',
-            'year_fab_mod.required' => 'O campo CEP é obrigatório!',
-            'brand_model.required' => 'O campo Rua/Endereço é obrigatório!',
+            'renavam.required' => 'O campo Renavam é obrigatório!',
+            'plate_car.required' => 'O campo Placa é obrigatório!',
+            'color_car.required' => 'O campo Cor do Veiculo 1 é obrigatório!',
+            'year_fab_mod.required' => 'O campo Ano Fab./Ano Mod. é obrigatório!',
+            'brand_model.required' => 'O campo Marca é obrigatório!',
+            'chassi_car.required' => 'O campo Chassi é obrigatório!',
         ];
 
         $this->validate($request, $rules, $customMessages);
@@ -459,6 +456,7 @@ class GeralController extends Controller
             case 'veiculo':
                 $veiculo = Veiculo::with('fotos')->find($request->id);
                 $return = view('components.modalVeiculo', get_defined_vars())->render();
+                $data = $veiculo;
                 break;
             case 'solicitacao':
                 $solicitacao = Solicitacao::with('lojista', 'client', 'veiculo')->find($request->id);
@@ -529,7 +527,8 @@ class GeralController extends Controller
     public function saveClient($request)
     {
         if(isset($request->client_foto)) $request->foto = $request->client_foto;
-        $client_create['lojista_id'] = $request->lojista_id;
+        $client_create['lojista_id'] = isset($request->particular) ? 0 : $request->lojista_id;
+        $client_create['particular'] = isset($request->particular) ? 1 : 0;
         $client_create['type_document'] = $request->type_document;
         $client_create['document_number'] = $request->document_number;
         $client_create['full_name'] = $request->full_name;
@@ -597,12 +596,14 @@ class GeralController extends Controller
     public function saveVeiculo($request)
     {
         if(isset($request->veiculo_foto)) $request->foto = $request->veiculo_foto;
-        $veiculo_create['lojista_id'] = $request->lojista_id;
+        $veiculo_create['lojista_id'] = isset($request->particular) ? 0 : $request->lojista_id;
+        $veiculo_create['particular'] = isset($request->particular) ? 1 : 0;
         $veiculo_create['renavam'] = $request->renavam;
         $veiculo_create['plate_car'] = $request->plate_car;
         $veiculo_create['color_car'] = $request->color_car;
         $veiculo_create['year_fab_mod'] = $request->year_fab_mod;
         $veiculo_create['brand_model'] = $request->brand_model;
+        $veiculo_create['chassi_car'] = $request->chassi_car;
 
         if(isset($request->veiculo_id)){
             $veiculo = Veiculo::find($request->veiculo_id)->update($veiculo_create);

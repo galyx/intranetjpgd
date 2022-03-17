@@ -1,5 +1,8 @@
 <form action="{{route('clientes.post')}}" method="post">
     <div class="row">
+        @if ($client->particular == 1)
+            <input type="hidden" name="particular" value="true">
+        @endif
         <input type="hidden" name="client_id" value="{{$client->id}}">
         <input type="hidden" name="lojista_id" value="{{$client->lojista_id}}">
 

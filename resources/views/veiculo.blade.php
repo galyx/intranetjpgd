@@ -72,6 +72,12 @@
                         <div class="row">
                             @if (auth()->user()->permission == 10)
                                 <div class="form-group col-12">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="particular_new" name="particular" value="true">
+                                        <label for="particular_new" class="form-check-label">Particular</label>
+                                    </div>
+                                </div>
+                                <div class="form-group col-12">
                                     <label for="">Lojista Relacionado</label>
                                     <select name="lojista_id" class="form-control form-control-sm">
                                         <option value="">Selecione um Lojista</option>
@@ -103,6 +109,10 @@
                             <div class="form-group col-12 col-sm-4">
                                 <label for="brand_model">Marca/Modelo</label>
                                 <input type="text" class="form-control form-control-sm" name="brand_model">
+                            </div>
+                            <div class="form-group col-12 col-sm-4">
+                                <label for="chassi_car">Chassi</label>
+                                <input type="text" class="form-control form-control-sm text-uppercase" name="chassi_car">
                             </div>
                         </div>
 

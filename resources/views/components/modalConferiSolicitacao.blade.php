@@ -1,19 +1,23 @@
 <form action="{{route('solicitacoes.update')}}" method="post">
     <input type="hidden" name="solicitacao_id" value="{{$solicitacao->id}}">
     <div class="row">
-        <div class="col-12 mb-2"><h2>Lojista</h2></div>
-        <div class="col-12 col-sm-6 py-2 px-1">
-            <span>Loja:</span>
-            <div class="border-bottom">{{$solicitacao->lojista->userData->razao_social}} - #{{\Str::padLeft($solicitacao->lojista_id, 6, '0')}}</div>
-        </div>
-        <div class="col-12 col-sm-6 py-2 px-1">
-            <span>Encarregado da Loja:</span>
-            <div class="border-bottom">{{$solicitacao->lojista->name}}</div>
-        </div>
-        <div class="col-12 col-sm-12 py-2 px-1">
-            <span>Endereço:</span>
-            <div class="border-bottom">{{$solicitacao->lojista->userData->address}}, {{$solicitacao->lojista->userData->home_number}} - {{$solicitacao->lojista->userData->address2}} - {{$solicitacao->lojista->userData->city}}/{{$solicitacao->lojista->userData->state}}</div>
-        </div>
+        @if (isset($solicitacao->lojista->userData))
+            <div class="col-12 mb-2"><h2>Lojista</h2></div>
+            <div class="col-12 col-sm-6 py-2 px-1">
+                <span>Loja:</span>
+                <div class="border-bottom">{{$solicitacao->lojista->userData->razao_social}} - #{{\Str::padLeft($solicitacao->lojista_id, 6, '0')}}</div>
+            </div>
+            <div class="col-12 col-sm-6 py-2 px-1">
+                <span>Encarregado da Loja:</span>
+                <div class="border-bottom">{{$solicitacao->lojista->name}}</div>
+            </div>
+            <div class="col-12 col-sm-12 py-2 px-1">
+                <span>Endereço:</span>
+                <div class="border-bottom">{{$solicitacao->lojista->userData->address}}, {{$solicitacao->lojista->userData->home_number}} - {{$solicitacao->lojista->userData->address2}} - {{$solicitacao->lojista->userData->city}}/{{$solicitacao->lojista->userData->state}}</div>
+            </div>
+        @else
+            <div class="col-12 mb-2"><h2>Particular</h2></div>
+        @endif
     </div>
     <div class="row mt-3">
         <div class="form-group col-12"><h2>Cliente</h2></div>

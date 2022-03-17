@@ -69,6 +69,12 @@
                         <div class="row">
                             @if (auth()->user()->permission == 10)
                                 <div class="form-group col-12">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="particular_new" name="particular" value="true">
+                                        <label for="particular_new" class="form-check-label">Particular</label>
+                                    </div>
+                                </div>
+                                <div class="form-group col-12">
                                     <label for="">Lojista Relacionado</label>
                                     <select name="lojista_id" class="form-control form-control-sm">
                                         <option value="">Selecione um Lojista</option>

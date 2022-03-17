@@ -11,6 +11,7 @@ class Client extends Model
 
     protected $fillable = [
         'lojista_id',
+        'particular',
         'type_document',
         'document_number',
         'document_number_rg',

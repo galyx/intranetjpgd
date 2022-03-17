@@ -14,25 +14,29 @@
 </style>
 
 <div>
-    <div class="col-12 mb-2"><h2>Lojista</h2></div>
-    <table width="100%">
-        <tbody>
-            <tr>
-                <td>
-                    <span>Loja:</span>
-                    <div>{{$solicitacao->lojista->userData->razao_social}} - #{{\Str::padLeft($solicitacao->lojista_id, 6, '0')}}</div>
-                </td>
-                <td>
-                    <span>Encarregado da Loja:</span>
-                    <div class="border-bottom">{{$solicitacao->lojista->name}}</div>
-                </td>
-                <td>
-                    <span>Endereço:</span>
-                    <div class="border-bottom">{{$solicitacao->lojista->userData->address}}, {{$solicitacao->lojista->userData->home_number}} - {{$solicitacao->lojista->userData->address2}} - {{$solicitacao->lojista->userData->city}}/{{$solicitacao->lojista->userData->state}}</div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    @if (isset($solicitacao->lojista->userData))
+        <div class="col-12 mb-2"><h2>Lojista</h2></div>
+        <table width="100%">
+            <tbody>
+                <tr>
+                    <td>
+                        <span>Loja:</span>
+                        <div>{{$solicitacao->lojista->userData->razao_social}} - #{{\Str::padLeft($solicitacao->lojista_id, 6, '0')}}</div>
+                    </td>
+                    <td>
+                        <span>Encarregado da Loja:</span>
+                        <div class="border-bottom">{{$solicitacao->lojista->name}}</div>
+                    </td>
+                    <td>
+                        <span>Endereço:</span>
+                        <div class="border-bottom">{{$solicitacao->lojista->userData->address}}, {{$solicitacao->lojista->userData->home_number}} - {{$solicitacao->lojista->userData->address2}} - {{$solicitacao->lojista->userData->city}}/{{$solicitacao->lojista->userData->state}}</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    @else
+        <div class="col-12 mb-2"><h2>Particular</h2></div>
+    @endif
 </div>
 <div>
     <div class="form-group col-12"><h2>Cliente</h2></div>

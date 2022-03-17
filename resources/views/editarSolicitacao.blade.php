@@ -17,6 +17,9 @@
                                     <form action="{{route('editar-solicitacao.post')}}" method="post" enctype="multipart/form-data">
                                         @csrf
                                         <div class="row">
+                                            @if ($solicitacao->particular == 1)
+                                                <input type="hidden" name="particular" value="true">
+                                            @endif
                                             <input type="hidden" name="solicitacao_id" value="{{$solicitacao->id}}">
                                             <input type="hidden" name="lojista_id" value="{{$solicitacao->lojista_id}}">
                                             <input type="hidden" name="client_id" value="{{$solicitacao->client_id}}">
@@ -150,21 +153,9 @@
                                                 <label for="brand_model">Marca/Modelo</label>
                                                 <input type="text" class="form-control form-control-sm" name="brand_model" value="{{$solicitacao->veiculo->brand_model}}">
                                             </div>
-                                            <div class="form-group col-12 col-sm-3">
-                                                <label for="gravame">Aquisição de Veiculos com Gravame</label>
-                                                <select name="gravame" class="form-control form-control-sm">
-                                                    <option value="simples" @if($solicitacao->gravame == 'simples') selected @endif>Simples</option>
-                                                    <option value="inclusao" @if($solicitacao->gravame == 'inclusao') selected @endif>Inclusão</option>
-                                                    <option value="exclusao" @if($solicitacao->gravame == 'exclusao') selected @endif>Exclusão</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group col-12 col-sm-3">
-                                                <label for="purchase_change_address2">Compra com Troca de Município</label>
-                                                <select name="purchase_change_address2" class="form-control form-control-sm">
-                                                    <option value="simples" @if($solicitacao->purchase_change_address2 == 'simples') selected @endif>Simples</option>
-                                                    <option value="inclusao" @if($solicitacao->purchase_change_address2 == 'inclusao') selected @endif>Inclusão</option>
-                                                    <option value="exclusao" @if($solicitacao->purchase_change_address2 == 'exclusao') selected @endif>Exclusão</option>
-                                                </select>
+                                            <div class="form-group col-12">
+                                                <label for="descricao_servicos">Descrição dos Serviços</label>
+                                                <textarea name="descricao_servicos" class="form-control">{{$solicitacao->descricao_servicos}}</textarea>
                                             </div>
                                         </div>
 
@@ -235,6 +226,7 @@
     </div>
     <!-- /.content-wrapper -->
     <input type="hidden" class="erros_input" value="{{session()->get('errors')}}">
+    <input type="hidden" class="olds_input" value="{{collect(session()->get('_old_input'))->forget('_token')}}">
 @endsection
 
 @section('script')
@@ -243,6 +235,11 @@
             if($('.erros_input').val()){
                 $.each(JSON.parse($('.erros_input').val()), (key, value) => {
                     $('form').find('[name="' + key + '"]').addClass('is-invalid').parent().append('<span class="invalid-feedback">' + value[0] + '</span>');
+                });
+            }
+            if($('.olds_input').val()){
+                $.each(JSON.parse($('.olds_input').val()), (key, value) => {
+                    $('form').find('[name="' + key + '"]').val(value);
                 });
             }
         });

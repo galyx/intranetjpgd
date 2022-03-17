@@ -19,6 +19,12 @@
                                         <div class="row">
                                             @if (auth()->user()->permission == 10)
                                                 <div class="form-group col-12">
+                                                    <div class="form-check">
+                                                        <input type="checkbox" class="form-check-input" id="particular_new" name="particular" @if(old('particular')) checked @endif value="true">
+                                                        <label for="particular_new" class="form-check-label">Particular</label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-12 @if(old('particular')) d-none @endif">
                                                     <label for="">Lojista Relacionado</label>
                                                     <select name="lojista_id" class="form-control form-control-sm">
                                                         <option value="">Selecione um Lojista</option>
@@ -123,21 +129,13 @@
                                                 <label for="brand_model">Marca/Modelo</label>
                                                 <input type="text" class="form-control form-control-sm" name="brand_model">
                                             </div>
-                                            <div class="form-group col-12 col-sm-3">
-                                                <label for="gravame">Aquisição de Veiculos com Gravame</label>
-                                                <select name="gravame" class="form-control form-control-sm">
-                                                    <option value="simples">Simples</option>
-                                                    <option value="inclusao">Inclusão</option>
-                                                    <option value="exclusao">Exclusão</option>
-                                                </select>
+                                            <div class="form-group col-12 col-sm-4">
+                                                <label for="chassi_car">Chassi</label>
+                                                <input type="text" class="form-control form-control-sm text-uppercase" name="chassi_car">
                                             </div>
-                                            <div class="form-group col-12 col-sm-3">
-                                                <label for="purchase_change_address2">Compra com Troca de Município</label>
-                                                <select name="purchase_change_address2" class="form-control form-control-sm">
-                                                    <option value="simples">Simples</option>
-                                                    <option value="inclusao">Inclusão</option>
-                                                    <option value="exclusao">Exclusão</option>
-                                                </select>
+                                            <div class="form-group col-12">
+                                                <label for="descricao_servicos">Descrição dos Serviços</label>
+                                                <textarea name="descricao_servicos" class="form-control"></textarea>
                                             </div>
                                         </div>
 
@@ -172,6 +170,7 @@
     </div>
     <!-- /.content-wrapper -->
     <input type="hidden" class="erros_input" value="{{session()->get('errors')}}">
+    <input type="hidden" class="olds_input" value="{{collect(session()->get('_old_input'))->forget('_token')}}">
 @endsection
 
 @section('script')
@@ -180,6 +179,11 @@
             if($('.erros_input').val()){
                 $.each(JSON.parse($('.erros_input').val()), (key, value) => {
                     $('form').find('[name="' + key + '"]').addClass('is-invalid').parent().append('<span class="invalid-feedback">' + value[0] + '</span>');
+                });
+            }
+            if($('.olds_input').val()){
+                $.each(JSON.parse($('.olds_input').val()), (key, value) => {
+                    $('form').find('[name="' + key + '"]').val(value);
                 });
             }
         });

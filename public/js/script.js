@@ -313,6 +313,29 @@ $(document).ready(function() {
             success: (data) => {
                 $($(this).data('target')).find('.modal-body').html(data.view);
                 $('.real').maskMoney({precision: 2, decimal:',', thousands: ''});
+                $('[name="year_fab_mod"]').mask('0000/0000');
+                $('[name="plate_car"]').addClass('text-uppercase').mask(MercoSulMaskBehavior, mercoSulOptions);
+                $('[name="cpf"]').mask('000.000.000-00');
+                $('[name="cnpj"]').mask('00.000.000/0000-00');
+                $('[name="document_number"]').mask('000.000.000-00');
+                $(document).on('change', '[name="type_document"]', function(){
+                    if($(this).val() == 'cpf'){
+                        $('[name="document_number"]').mask('000.000.000-00');
+                    }else{
+                        $('[name="document_number"]').mask('00.000.000/0000-00');
+                    }
+                });
+
+                // Telefone/Celeular
+                var behavior = function (val) {
+                    return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
+                },
+                options_fone = {
+                    onKeyPress: function (val, e, field, options_fone) {
+                        field.mask(behavior.apply({}, arguments), options_fone);
+                    }
+                };
+                $('.phone').mask(behavior, options_fone);
             }
         });
     });
@@ -388,6 +411,14 @@ $(document).ready(function() {
                 }
             }
         });
+    });
+
+    $(document).on('change', '[name="particular"]', function(){
+        if($(this).prop('checked')){
+            $(this).closest('form').find('[name="lojista_id"]').parent().addClass('d-none');
+        }else{
+            $(this).closest('form').find('[name="lojista_id"]').parent().removeClass('d-none');
+        }
     });
 
     $(document).on('click', '.btn-href', function(e) {

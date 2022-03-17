@@ -13,7 +13,7 @@
     }
 </style>
 
-<div>
+{{-- <div>
     <div class="col-12 mb-2"><h2>Lojista</h2></div>
     <table width="100%">
         <tbody>
@@ -33,9 +33,9 @@
             </tr>
         </tbody>
     </table>
-</div>
+</div> --}}
 
-<div><h2>Orçamento</h2></div>
+<div><h2>Valores</h2></div>
 <table width="100%">
     <thead>
         <tr>

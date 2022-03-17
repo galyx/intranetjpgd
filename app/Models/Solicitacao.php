@@ -11,12 +11,12 @@ class Solicitacao extends Model
 
     protected $fillable = [
         'lojista_id',
+        'particular',
         'client_id',
         'veiculo_id',
         'observacao',
         'despachante_observacao',
-        'gravame',
-        'purchase_change_address2',
+        'descricao_servicos',
         'valor_orcamento',
         'status',
     ];

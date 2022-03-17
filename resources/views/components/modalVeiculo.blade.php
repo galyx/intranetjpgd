@@ -1,5 +1,8 @@
 <form action="{{route('veiculos.post')}}" method="post">
     <div class="row">
+        @if ($veiculo->particular == 1)
+            <input type="hidden" name="particular" value="true">
+        @endif
         <input type="hidden" name="veiculo_id" value="{{$veiculo->id}}">
         <input type="hidden" name="lojista_id" value="{{$veiculo->lojista_id}}">
 
@@ -22,6 +25,10 @@
         <div class="form-group col-12 col-sm-4">
             <label for="brand_model">Marca/Modelo</label>
             <input type="text" class="form-control form-control-sm" name="brand_model" value="{{$veiculo->brand_model}}">
+        </div>
+        <div class="form-group col-12 col-sm-4">
+            <label for="chassi_car">Chassi</label>
+            <input type="text" class="form-control form-control-sm text-uppercase" name="chassi_car" value="{{$veiculo->chassi_car}}">
         </div>
     </div>
     
