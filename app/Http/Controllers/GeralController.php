@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use WGenial\NumeroPorExtenso\NumeroPorExtenso;
 
 class GeralController extends Controller
 {
@@ -511,16 +512,18 @@ class GeralController extends Controller
         $html_solicitacao = view('components.htmlPdfSolicitacao', get_defined_vars())->render();
         $pdf = App::make('dompdf.wrapper');
         $pdf->loadHTML($html_solicitacao);
-        return $pdf->stream();
+        return $pdf->stream('OS-'.\Str::padLeft($id, 6, '0').'.pdf');
     }
     // ------------------------------
     public function imprimirReciboOS($id)
     {
+        $extenso = new NumeroPorExtenso;
         $solicitacao = Solicitacao::find($id);
+        $valor_extenso = $extenso->converter($solicitacao->valor_orcamento);
         $html_solicitacao = view('components.htmlPdfRecibo', get_defined_vars())->render();
         $pdf = App::make('dompdf.wrapper');
         $pdf->loadHTML($html_solicitacao);
-        return $pdf->stream();
+        return $pdf->stream('Recibo-OS-'.\Str::padLeft($id, 6, '0').'.pdf');
     }
 
     // ------------------------------
