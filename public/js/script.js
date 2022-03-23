@@ -293,12 +293,35 @@ $(document).ready(function() {
     });
 
     $(document).on('click', '.btn-delete', function(){
-        $.ajax({
-            url: $(this).data('href'),
-            type: 'POST',
-            data: {table: $(this).data('table'), id: $(this).data('id')},
-            success: (data) => {
-                window.location.reload();
+        Swal.fire({
+            icon: 'warning',
+            title: 'Apagar Dados?',
+            showCancelButton: true,
+            confirmButtonText: 'Apagar',
+            cancelButtonText: 'Cancelar',
+        }).then((result) => {
+            if(result.isConfirmed){
+                Swal.fire({
+                    title: 'Apagando, aguarde...',
+                    allowOutsideClick: false,
+                    timerProgressBar: true,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+                $.ajax({
+                    url: $(this).data('href'),
+                    type: 'POST',
+                    data: {table: $(this).data('table'), id: $(this).data('id')},
+                    success: (data) => {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Dados Apagados'
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    }
+                });
             }
         });
     });

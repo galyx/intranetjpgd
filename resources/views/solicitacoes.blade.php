@@ -48,6 +48,9 @@
                                                         <div class="btn-group">
                                                             <button type="button" class="btn btn-info btn-editar" data-href="{{route('buscaDadosGerais')}}" data-id="{{$solicitacao->id}}" data-table="solicitacao" data-target="#conferirSolicitacao">Conferir</button>
                                                             <a href="{{route('editar-solicitacao', $solicitacao->id)}}" class="btn btn-primary">Editar</a>
+                                                            @if (auth()->user()->permission == 10)
+                                                                <button type="button" class="btn btn-danger btn-delete" data-table="solicitacao" data-href="{{route('destroyData.post')}}" data-id="{{$solicitacao->id}}" data-table="solicitacao" data-target="#conferirSolicitacao">Apagar</button>
+                                                            @endif
                                                         </div>
                                                     </td>
                                                 </tr>

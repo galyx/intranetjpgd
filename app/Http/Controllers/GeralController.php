@@ -436,6 +436,15 @@ class GeralController extends Controller
                 Storage::deleteDirectory('public/veiculo_'.$request->id);
                 VeiculoFoto::where('veiculo_id', $request->id)->delete();
                 break;
+            case 'solicitacao':
+                Solicitacao::find($request->id)->delete();
+                Orcamento::where('solicitacao_id', $request->id)->delete();
+                MissingInfo::where('solicitacao_id', $request->id)->delete();
+                foreach(DocumentImage::where('solicitacao_id', $request->id)->get() as $excluir_document){
+                    Storage::delete('public/'.$excluir_document->path);
+                    DocumentImage::find($excluir_document->id)->delete();
+                }
+                break;
         }
 
         return response()->json('',200);
