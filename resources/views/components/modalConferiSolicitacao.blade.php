@@ -22,28 +22,28 @@
     <div class="row mt-3">
         <div class="form-group col-12"><h2>Cliente</h2></div>
         <div class="col-12 col-sm-3 py-2 px-1">
-            <span>Documento <span style="text-transform: uppercase;">{{$solicitacao->client->type_document}}</span>:</span>
-            <div class="border-bottom">{{$solicitacao->client->document_number}}</div>
+            <span>Documento <span style="text-transform: uppercase;">{{$solicitacao->client->type_document ?? ''}}</span>:</span>
+            <div class="border-bottom">{{$solicitacao->client->document_number ?? ''}}</div>
         </div>
         <div class="col-12 col-sm-6 py-2 px-1">
             <span>Nome:</span>
-            <div class="border-bottom">{{$solicitacao->client->full_name}}</div>
+            <div class="border-bottom">{{$solicitacao->client->full_name  ?? ''}}</div>
         </div>
         <div class="col-12 col-sm-3 py-2 px-1">
             <span>Document RG:</span>
-            <div class="border-bottom">{{$solicitacao->client->document_number_rg}}</div>
+            <div class="border-bottom">{{$solicitacao->client->document_number_rg  ?? ''}}</div>
         </div>
         <div class="col-12 col-sm-6 py-2 px-1">
             <span>Telefone/Celular:</span>
-            <div class="border-bottom">{{$solicitacao->client->phone1}}/{{$solicitacao->client->phone2}}/{{$solicitacao->client->phone3}}</div>
+            <div class="border-bottom">{{$solicitacao->client->phone1  ?? ''}}/{{$solicitacao->client->phone2  ?? ''}}/{{$solicitacao->client->phone3  ?? ''}}</div>
         </div>
         <div class="col-12 col-sm-6 py-2 px-1">
             <span>Endereço:</span>
-            <div class="border-bottom">{{$solicitacao->client->address}}, {{$solicitacao->client->home_number}} - {{$solicitacao->client->address2}} - {{$solicitacao->client->city}}/{{$solicitacao->client->state}}</div>
+            <div class="border-bottom">{{$solicitacao->client->address  ?? ''}}, {{$solicitacao->client->home_number  ?? ''}} - {{$solicitacao->client->address2  ?? ''}} - {{$solicitacao->client->city  ?? ''}}/{{$solicitacao->client->state  ?? ''}}</div>
         </div>
         <div class="col-12 col-sm-3 py-2 px-1">
             <span>Complemento:</span>
-            <div class="border-bottom">{{$solicitacao->client->complement}}</div>
+            <div class="border-bottom">{{$solicitacao->client->complement  ?? ''}}</div>
         </div>
     </div>
     <div class="row mt-3">
