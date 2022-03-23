@@ -34,7 +34,7 @@
                                                 <tr>
                                                     <td>#{{\Str::padLeft($solicitacao->id, 6, '0')}}</td>
                                                     <td>{{$solicitacao->lojista->userData->razao_social ?? 'Particular'}}</td>
-                                                    <td>{{$solicitacao->client->full_name}}</td>
+                                                    <td>{{$solicitacao->client->full_name ?? ''}}</td>
                                                     <td>{{$solicitacao->veiculo->brand_model}}</td>
                                                     <td>{{date('d/m/Y', strtotime($solicitacao->created_at))}}</td>
                                                     <td>
