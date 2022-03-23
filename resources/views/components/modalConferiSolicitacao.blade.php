@@ -68,13 +68,9 @@
             <span>Marca/Modelo:</span>
             <div class="border-bottom">{{$solicitacao->veiculo->brand_model}}</div>
         </div>
-        <div class="col-12 col-sm-6 py-2 px-1">
-            <span>Aquisição de Veiculos com Gravame:</span>
-            <div class="border-bottom" style="text-transform: capitalize;">{{$solicitacao->gravame}}</div>
-        </div>
-        <div class="col-12 col-sm-6 py-2 px-1">
-            <span>Compra com Troca de Município:</span>
-            <div class="border-bottom" style="text-transform: capitalize;">{{$solicitacao->purchase_change_address2}}</div>
+        <div class="col-12 col-sm-4 py-2 px-1">
+            <span>Aquisição:</span>
+            <div class="border-bottom">{{date('d/m/Y', strtotime($solicitacao->veiculo->created_at))}}</div>
         </div>
     </div>
     <div class="mt-3">

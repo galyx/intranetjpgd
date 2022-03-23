@@ -63,6 +63,11 @@
         <img src="data:image/svg+xml;base64,{{base64_encode(file_get_contents('imgs/Logo-jpg-preta-300x155.png'))}}" alt="">
     </header>
 
+    <div style="margin-top: 10px;margin-bottom: 1px;">
+        <div><b>OS: {{\Str::padLeft($solicitacao->id, 6, '0')}}</b></div>
+        <div><b>Data: {{date('d/m/Y', strtotime($solicitacao->created_at))}}</b></div>
+    </div>
+
     <div>
         @if (isset($solicitacao->lojista->userData))
             <div class="col-12 mb-2"><h2>Lojista</h2></div>
@@ -130,29 +135,35 @@
                 <tr>
                     <td>
                         <span>Renavam:</span>
-                        <div class="border-bottom">{{$solicitacao->veiculo->renavam}}</div>
+                        <div>{{$solicitacao->veiculo->renavam}}</div>
                     </td>
                     <td>
                         <span>Placa:</span>
-                        <div class="border-bottom">{{$solicitacao->veiculo->plate_car}}</div>
+                        <div>{{$solicitacao->veiculo->plate_car}}</div>
                     </td>
                     <td>
                         <span>Cor do Veiculo:</span>
-                        <div class="border-bottom">{{$solicitacao->veiculo->color_car}}</div>
+                        <div>{{$solicitacao->veiculo->color_car}}</div>
                     </td>
                 </tr>
                 <tr>
                     <td>
                         <span>Ano Fab./Ano Mod.:</span>
-                        <div class="border-bottom">{{$solicitacao->veiculo->year_fab_mod}}</div>
+                        <div>{{$solicitacao->veiculo->year_fab_mod}}</div>
                     </td>
                     <td>
                         <span>Marca/Modelo:</span>
-                        <div class="border-bottom">{{$solicitacao->veiculo->brand_model}}</div>
+                        <div>{{$solicitacao->veiculo->brand_model}}</div>
                     </td>
                     <td>
                         <span>Chassi:</span>
-                        <div class="border-bottom">{{$solicitacao->veiculo->chassi_car}}</div>
+                        <div>{{$solicitacao->veiculo->chassi_car}}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <span>Aquisicao:</span>
+                        <div>{{date('d/m/Y', strtotime($solicitacao->veiculo->created_at))}}</div>
                     </td>
                 </tr>
             </tbody>

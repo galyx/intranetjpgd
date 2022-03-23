@@ -63,6 +63,10 @@
         <img src="data:image/svg+xml;base64,{{base64_encode(file_get_contents('imgs/Logo-jpg-preta-300x155.png'))}}" alt="">
     </header>
 
+    <div style="margin-top: 10px;margin-bottom: 1px;">
+        <div><b>Recibo da OS: {{\Str::padLeft($solicitacao->id, 6, '0')}}</b></div>
+    </div>
+
     <div style="margin-top: 10px;margin-bottom: 20px;">
         Recebi de <b>{{$solicitacao->client->full_name}}</b>, <b><span style="text-transform: uppercase;">{{$solicitacao->client->type_document}}</span> nº {{$solicitacao->client->document_number}}</b> e
         endereço <b>{{$solicitacao->client->address}}</b>, número <b>{{$solicitacao->client->home_number}}</b>, bairro <b>{{$solicitacao->client->address2}}</b>, na cidade de
