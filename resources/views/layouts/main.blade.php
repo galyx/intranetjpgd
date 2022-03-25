@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token() }}">
+  <meta name="auth-permission" content="{{ auth()->user()->permission }}">
   <title>IntraNet - JPG Despachante</title>
 
   <link rel="stylesheet" href="{{asset('plugins/bootstrap-4.6.1-dist/css/bootstrap.min.css')}}">
@@ -55,10 +56,10 @@
             <li class="nav-item">
               <a href="{{route('solicitacoes')}}" class="nav-link">Solicitações</a>
             </li>
-            <li class="nav-item">
-              <a href="{{route('nova-solicitacao')}}" class="nav-link">Nova Solicitação</a>
-            </li>
             @if (auth()->user()->permission == 10)
+              <li class="nav-item">
+                <a href="{{route('nova-solicitacao')}}" class="nav-link">Nova Solicitação</a>
+              </li>
               <li class="nav-item">
                 <a href="{{route('lojistas')}}" class="nav-link">Lojistas</a>
               </li>

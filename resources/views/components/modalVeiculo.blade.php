@@ -1,3 +1,7 @@
+@php
+    $permission = true;
+    if(auth()->user()->permission == 10) $permission = false;
+@endphp
 <form action="{{route('veiculos.post')}}" method="post">
     <div class="row">
         @if ($veiculo->particular == 1)
@@ -8,27 +12,27 @@
 
         <div class="form-group col-12 col-sm-4">
             <label for="renavam">Renavam</label>
-            <input type="text" class="form-control form-control-sm" name="renavam" value="{{$veiculo->renavam}}">
+            <input type="text" class="form-control form-control-sm" @if($permission) readonly @endif name="renavam" value="{{$veiculo->renavam}}">
         </div>
         <div class="form-group col-12 col-sm-4">
             <label for="plate_car">Placa</label>
-            <input type="text" class="form-control form-control-sm" name="plate_car" value="{{$veiculo->plate_car}}">
+            <input type="text" class="form-control form-control-sm" @if($permission) readonly @endif name="plate_car" value="{{$veiculo->plate_car}}">
         </div>
         <div class="form-group col-12 col-sm-4">
             <label for="color_car">Cor do Veiculo</label>
-            <input type="text" class="form-control form-control-sm" name="color_car" value="{{$veiculo->color_car}}">
+            <input type="text" class="form-control form-control-sm" @if($permission) readonly @endif name="color_car" value="{{$veiculo->color_car}}">
         </div>
         <div class="form-group col-12 col-sm-4">
             <label for="year_fab_mod">Ano Fab./Ano Mod.</label>
-            <input type="text" class="form-control form-control-sm" name="year_fab_mod" value="{{$veiculo->year_fab_mod}}">
+            <input type="text" class="form-control form-control-sm" @if($permission) readonly @endif name="year_fab_mod" value="{{$veiculo->year_fab_mod}}">
         </div>
         <div class="form-group col-12 col-sm-4">
             <label for="brand_model">Marca/Modelo</label>
-            <input type="text" class="form-control form-control-sm" name="brand_model" value="{{$veiculo->brand_model}}">
+            <input type="text" class="form-control form-control-sm" @if($permission) readonly @endif name="brand_model" value="{{$veiculo->brand_model}}">
         </div>
         <div class="form-group col-12 col-sm-4">
             <label for="chassi_car">Chassi</label>
-            <input type="text" class="form-control form-control-sm text-uppercase" name="chassi_car" value="{{$veiculo->chassi_car}}">
+            <input type="text" class="form-control form-control-sm text-uppercase" @if($permission) readonly @endif name="chassi_car" value="{{$veiculo->chassi_car}}">
         </div>
     </div>
     
@@ -70,10 +74,12 @@
                 </div>
             @endforeach
         @endisset
-        <div class="col-6 col-md-3 mb-2">
-            <button type="button" class="btn btn-primary btn-add-foto">+</button>
-            <input type="file" name="foto[]" class="d-none add-foto">
-            <div class="foto"></div>
-        </div>
+        @if (auth()->user()->permission == 10)
+            <div class="col-6 col-md-3 mb-2">
+                <button type="button" class="btn btn-primary btn-add-foto">+</button>
+                <input type="file" name="foto[]" class="d-none add-foto">
+                <div class="foto"></div>
+            </div>
+        @endif
     </div>
 </form>

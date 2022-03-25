@@ -34,7 +34,7 @@ class GeralController extends Controller
     {
         $solicitacoes = new Solicitacao();
         if(auth()->user()->permission == 0) $solicitacoes = $solicitacoes->where('lojista_id', auth()->user()->id);
-        $solicitacoes = $solicitacoes->paginate(20);
+        $solicitacoes = $solicitacoes->paginate(50);
         return view('solicitacoes', get_defined_vars());
     }
 

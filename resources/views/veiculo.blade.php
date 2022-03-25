@@ -15,9 +15,11 @@
                             </div>
                             <div class="card-body">
                                 <div class="container">
-                                    <div class="mb-3">
-                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#novoVeiculo">Novo Veiculo</button>
-                                    </div>
+                                    @if (auth()->user()->permission == 10)
+                                        <div class="mb-3">
+                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#novoVeiculo">Novo Veiculo</button>
+                                        </div>
+                                    @endif
                                     <table class="table table-striped">
                                         <thead>
                                             <tr>
@@ -37,8 +39,10 @@
                                                     <td>{{$veiculo->brand_model}}</td>
                                                     <td>
                                                         <div class="btn-group">
-                                                            <button type="button" class="btn btn-info btn-editar" data-href="{{route('buscaDadosGerais')}}" data-id="{{$veiculo->id}}" data-table="veiculo" data-target="#alteraDatas">Alterar</button>
-                                                            <button type="button" class="btn btn-danger btn-delete" data-href="{{route('destroyData.post')}}" data-table="veiculo" data-id="{{$veiculo->id}}">Excluir</button>
+                                                            <button type="button" class="btn btn-info btn-editar" data-href="{{route('buscaDadosGerais')}}" data-id="{{$veiculo->id}}" data-table="veiculo" data-target="#alteraDatas">{!!auth()->user()->permission == 10 ? 'Alterar' : '<i class="fas fa-eye"></i>'!!}</button>
+                                                            @if (auth()->user()->permission == 10)
+                                                                <button type="button" class="btn btn-danger btn-delete" data-href="{{route('destroyData.post')}}" data-table="veiculo" data-id="{{$veiculo->id}}">Excluir</button>
+                                                            @endif
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -149,7 +153,9 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                    <button type="button" class="btn btn-primary btn-save">Salvar Alterações</button>
+                    @if (auth()->user()->permission == 10)
+                        <button type="button" class="btn btn-primary btn-save">Salvar Alterações</button>
+                    @endif
                 </div>
             </div>
         </div>

@@ -1,3 +1,7 @@
+@php
+    $permission = true;
+    if(auth()->user()->permission == 10) $permission = false;
+@endphp
 <form action="{{route('clientes.post')}}" method="post">
     <div class="row">
         @if ($client->particular == 1)
@@ -8,70 +12,70 @@
 
         <div class="form-group col-12 col-sm-3">
             <label for="type_document">Tipo Documento</label>
-            <select name="type_document" class="form-control form-control-sm">
+            <select name="type_document" class="form-control form-control-sm" @if($permission) readonly @endif>
                 <option value="cpf" value="{{$client->type_document == 'cpf' ? 'selected' : ''}}">CPF</option>
                 <option value="cnpj" value="{{$client->type_document == 'cnpj' ? 'selected' : ''}}">CNPJ</option>
             </select>
         </div>
         <div class="form-group col-12 col-sm-3">
             <label for="document_number">Numero Documento</label>
-            <input type="text" class="form-control form-control-sm" name="document_number" value="{{$client->document_number}}">
+            <input type="text" class="form-control form-control-sm" @if($permission) readonly @endif name="document_number" value="{{$client->document_number}}">
         </div>
         <div class="form-group col-12 col-sm-6">
             <label for="full_name">Nome Completo</label>
-            <input type="text" class="form-control form-control-sm" name="full_name" value="{{$client->full_name}}">
+            <input type="text" class="form-control form-control-sm" @if($permission) readonly @endif name="full_name" value="{{$client->full_name}}">
         </div>
         <div class="form-group col-12 col-sm-6">
             <label for="email">Email</label>
-            <input type="text" class="form-control form-control-sm" name="email" value="{{$client->email}}">
+            <input type="text" class="form-control form-control-sm" @if($permission) readonly @endif name="email" value="{{$client->email}}">
         </div>
         <div class="form-group col-12 col-sm-3">
             <label for="document_number_rg">RG</label>
-            <input type="text" class="form-control form-control-sm" name="document_number_rg" value="{{$client->document_number_rg ?? ''}}">
+            <input type="text" class="form-control form-control-sm" @if($permission) readonly @endif name="document_number_rg" value="{{$client->document_number_rg ?? ''}}">
         </div>
     </div>
     <div class="row">
         <div class="form-group col-12 col-sm-3">
             <label for="phone1">Telefone/Celular - 1</label>
-            <input type="text" class="form-control form-control-sm phone" name="phone1" value="{{$client->phone1}}">
+            <input type="text" class="form-control form-control-sm phone" @if($permission) readonly @endif name="phone1" value="{{$client->phone1}}">
         </div>
         <div class="form-group col-12 col-sm-3">
             <label for="phone2">Telefone/Celular - 2</label>
-            <input type="text" class="form-control form-control-sm phone" name="phone2" value="{{$client->phone2 ?? ''}}">
+            <input type="text" class="form-control form-control-sm phone" @if($permission) readonly @endif name="phone2" value="{{$client->phone2 ?? ''}}">
         </div>
         <div class="form-group col-12 col-sm-3">
             <label for="phone3">Telefone/Celular - 3</label>
-            <input type="text" class="form-control form-control-sm phone" name="phone3" value="{{$client->phone3 ?? ''}}">
+            <input type="text" class="form-control form-control-sm phone" @if($permission) readonly @endif name="phone3" value="{{$client->phone3 ?? ''}}">
         </div>
     </div>
     <div class="row">
         <div class="form-group col-12 col-sm-3">
             <label for="postal_code">CEP</label>
-            <input type="text" class="form-control form-control-sm" name="postal_code" value="{{$client->postal_code}}">
+            <input type="text" class="form-control form-control-sm" @if($permission) readonly @endif name="postal_code" value="{{$client->postal_code}}">
         </div>
         <div class="form-group col-12 col-sm-6">
             <label for="address">Rua/Endereço</label>
-            <input type="text" class="form-control form-control-sm" name="address" value="{{$client->address}}">
+            <input type="text" class="form-control form-control-sm" @if($permission) readonly @endif name="address" value="{{$client->address}}">
         </div>
         <div class="form-group col-12 col-sm-3">
             <label for="home_number">Numero da Casa</label>
-            <input type="text" class="form-control form-control-sm" name="home_number" value="{{$client->home_number}}">
+            <input type="text" class="form-control form-control-sm" @if($permission) readonly @endif name="home_number" value="{{$client->home_number}}">
         </div>
         <div class="form-group col-12 col-sm-3">
             <label for="address2">Bairro</label>
-            <input type="text" class="form-control form-control-sm" name="address2" value="{{$client->address2}}">
+            <input type="text" class="form-control form-control-sm" @if($permission) readonly @endif name="address2" value="{{$client->address2}}">
         </div>
         <div class="form-group col-12 col-sm-3">
             <label for="city">Cidade</label>
-            <input type="text" class="form-control form-control-sm" name="city" value="{{$client->city}}">
+            <input type="text" class="form-control form-control-sm" @if($permission) readonly @endif name="city" value="{{$client->city}}">
         </div>
         <div class="form-group col-12 col-sm-3">
             <label for="state">Estado</label>
-            <input type="text" class="form-control form-control-sm" name="state" value="{{$client->state}}">
+            <input type="text" class="form-control form-control-sm" @if($permission) readonly @endif name="state" value="{{$client->state}}">
         </div>
         <div class="form-group col-12 col-sm-3">
             <label for="complement">Complemento</label>
-            <input type="text" class="form-control form-control-sm" name="complement" value="{{$client->complement ?? ''}}">
+            <input type="text" class="form-control form-control-sm" @if($permission) readonly @endif name="complement" value="{{$client->complement ?? ''}}">
         </div>
     </div>
     
@@ -113,10 +117,12 @@
                 </div>
             @endforeach
         @endisset
-        <div class="col-6 col-md-3 mb-2">
-            <button type="button" class="btn btn-primary btn-add-foto">+</button>
-            <input type="file" name="foto[]" class="d-none add-foto">
-            <div class="foto"></div>
-        </div>
+        @if (auth()->user()->permission == 10)
+            <div class="col-6 col-md-3 mb-2">
+                <button type="button" class="btn btn-primary btn-add-foto">+</button>
+                <input type="file" name="foto[]" class="d-none add-foto">
+                <div class="foto"></div>
+            </div>
+        @endif
     </div>
 </form>
