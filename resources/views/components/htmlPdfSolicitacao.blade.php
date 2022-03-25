@@ -82,7 +82,9 @@
                             <span>Encarregado da Loja:</span>
                             <div class="border-bottom">{{$solicitacao->lojista->name}}</div>
                         </td>
-                        <td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
                             <span>Endereço:</span>
                             <div class="border-bottom">{{$solicitacao->lojista->userData->address}}, {{$solicitacao->lojista->userData->home_number}} - {{$solicitacao->lojista->userData->address2}} - {{$solicitacao->lojista->userData->city}}/{{$solicitacao->lojista->userData->state}}</div>
                         </td>
@@ -106,16 +108,22 @@
                         <div class="border-bottom">{{$solicitacao->client->full_name}}</div>
                     </td>
                     <td>
-                        <span>Document RG:</span>
-                        <div class="border-bottom">{{$solicitacao->client->document_number_rg}}</div>
+                        <span>Email:</span>
+                        <div class="border-bottom">{{$solicitacao->client->email}}</div>
                     </td>
                 </tr>
                 <tr>
                     <td>
+                        <span>Document RG:</span>
+                        <div class="border-bottom">{{$solicitacao->client->document_number_rg}}</div>
+                    </td>
+                    <td colspan="2">
                         <span>Telefone/Celular:</span>
                         <div class="border-bottom">{{$solicitacao->client->phone1}}/{{$solicitacao->client->phone2}}/{{$solicitacao->client->phone3}}</div>
                     </td>
-                    <td>
+                </tr>
+                <tr>
+                    <td colspan="2">
                         <span>Endereço:</span>
                         <div class="border-bottom">{{$solicitacao->client->address}}, {{$solicitacao->client->home_number}} - {{$solicitacao->client->address2}} - {{$solicitacao->client->city}}/{{$solicitacao->client->state}}</div>
                     </td>

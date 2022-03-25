@@ -41,10 +41,16 @@
                                                 <label for="full_name">Nome Completo</label>
                                                 <input type="text" class="form-control form-control-sm" name="full_name" value="{{$solicitacao->client->full_name}}">
                                             </div>
+                                            <div class="form-group col-12 col-sm-6">
+                                                <label for="email">Email</label>
+                                                <input type="text" class="form-control form-control-sm" value="{{$solicitacao->client->email}}" name="email">
+                                            </div>
                                             <div class="form-group col-12 col-sm-3">
                                                 <label for="document_number_rg">RG</label>
                                                 <input type="text" class="form-control form-control-sm" name="document_number_rg" value="{{$solicitacao->client->document_number_rg}}">
                                             </div>
+                                        </div>
+                                        <div class="row">
                                             <div class="form-group col-12 col-sm-3">
                                                 <label for="phone1">Telefone/Celular - 1</label>
                                                 <input type="text" class="form-control form-control-sm phone" name="phone1" value="{{$solicitacao->client->phone1}}">
@@ -57,6 +63,8 @@
                                                 <label for="phone3">Telefone/Celular - 3</label>
                                                 <input type="text" class="form-control form-control-sm phone" name="phone3" value="{{$solicitacao->client->phone3}}">
                                             </div>
+                                        </div>
+                                        <div class="row">
                                             <div class="form-group col-12 col-sm-3">
                                                 <label for="postal_code">CEP</label>
                                                 <input type="text" class="form-control form-control-sm" name="postal_code" value="{{$solicitacao->client->postal_code}}">

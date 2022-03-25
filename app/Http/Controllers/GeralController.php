@@ -546,6 +546,7 @@ class GeralController extends Controller
         $client_create['type_document'] = $request->type_document;
         $client_create['document_number'] = $request->document_number;
         $client_create['full_name'] = $request->full_name;
+        $client_create['email'] = $request->email;
         $client_create['document_number_rg'] = $request->document_number_rg;
         $client_create['phone1'] = $request->phone1;
         $client_create['phone2'] = $request->phone2;

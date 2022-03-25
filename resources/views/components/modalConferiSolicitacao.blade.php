@@ -25,9 +25,13 @@
             <span>Documento <span style="text-transform: uppercase;">{{$solicitacao->client->type_document ?? ''}}</span>:</span>
             <div class="border-bottom">{{$solicitacao->client->document_number ?? ''}}</div>
         </div>
-        <div class="col-12 col-sm-6 py-2 px-1">
+        <div class="col-12 col-sm-4 py-2 px-1">
             <span>Nome:</span>
             <div class="border-bottom">{{$solicitacao->client->full_name  ?? ''}}</div>
+        </div>
+        <div class="col-12 col-sm-4 py-2 px-1">
+            <span>Email:</span>
+            <div class="border-bottom">{{$solicitacao->client->email  ?? ''}}</div>
         </div>
         <div class="col-12 col-sm-3 py-2 px-1">
             <span>Document RG:</span>

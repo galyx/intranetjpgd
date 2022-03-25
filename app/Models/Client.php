@@ -16,6 +16,7 @@ class Client extends Model
         'document_number',
         'document_number_rg',
         'full_name',
+        'email',
         'phone1',
         'phone2',
         'phone3',
