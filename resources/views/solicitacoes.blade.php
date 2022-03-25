@@ -17,6 +17,41 @@
                             </div>
                             <div class="card-body">
                                 <div class="container">
+                                    <form action="" method="GET">
+                                        <div class="row mb-2">
+                                            @if (auth()->user()->permission == 10)
+                                                <div class="form-group col-12 col-sm-3">
+                                                    <label for="">Filtrar por Lojista</label>
+                                                    <select name="lojista_id" class="form-control form-control-sm">
+                                                        <option value="todos" @isset($request->lojista_id) @if($request->lojista_id == 'todos') selected @endif @endisset>Todos</option>
+                                                        <option value="0" @isset($request->lojista_id) @if($request->lojista_id == '0') selected @endif @endisset>Particular</option>
+                                                        @foreach ($lojistas as $lojista)
+                                                            <option value="{{$lojista->id}}" @isset($request->lojista_id) @if($request->lojista_id == $lojista->id) selected @endif @endisset>{{$lojista->userData->razao_social}}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            @endif
+                                            <div class="form-group col-12 col-sm-3">
+                                                <label for="">Filtrar por Status</label>
+                                                <select name="os_status" class="form-control form-control-sm">
+                                                    <option value="todos" @isset($request->os_status) @if($request->os_status == 'todos') selected @endif @endisset>Todos</option>
+                                                    <option value="0" @isset($request->os_status) @if($request->os_status == '0') selected @endif @endisset>Analise</option>
+                                                    <option value="1" @isset($request->os_status) @if($request->os_status == '1') selected @endif @endisset>Finalizado</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-12 col-sm-3 d-flex">
+                                                <div class="mt-auto">
+                                                    <button type="submit" class="btn btn-sm btn-info">Filtrar</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <div class="row mb-2">
+                                        <div class="form-group col-12 col-sm-3">
+                                            <button type="button" class="btn btn-primary btn-block btn-soma-os" disabled>Somar OS</button>
+                                        </div>
+                                    </div>
+
                                     <table class="table table-striped">
                                         <thead>
                                             <tr>
@@ -32,7 +67,16 @@
                                         <tbody>
                                             @foreach ($solicitacoes as $solicitacao)
                                                 <tr>
-                                                    <td>#{{\Str::padLeft($solicitacao->id, 6, '0')}}</td>
+                                                    <td>
+                                                        @if ($solicitacao->lojista_id == 0)
+                                                            #{{\Str::padLeft($solicitacao->id, 6, '0')}}
+                                                        @else
+                                                            <div class="form-check">
+                                                                <input type="checkbox" id="os-{{$solicitacao->id}}" class="form-check-input check-os" data-os_id="{{$solicitacao->id}}" data-os_lojista_id="{{$solicitacao->lojista_id}}">
+                                                                <label for="os-{{$solicitacao->id}}" class="form-check-label">#{{\Str::padLeft($solicitacao->id, 6, '0')}}</label>
+                                                            </div>
+                                                        @endif
+                                                    </td>
                                                     <td>{{$solicitacao->lojista->userData->razao_social ?? 'Particular'}}</td>
                                                     <td>{{$solicitacao->client->full_name ?? ''}}</td>
                                                     <td>{{$solicitacao->veiculo->brand_model}}</td>
@@ -94,4 +138,68 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('script')
+    <script>
+        $(document).ready(function(){
+            $(document).on('change', '.check-os', function(){
+                var isValid = true;
+                $('.check-os').each(function(){
+                    if($(this).prop('checked')) isValid = false;
+                });
+                $('.btn-soma-os').prop('disabled', isValid);
+            });
+            $(document).on('click', '.btn-soma-os', function(){
+                var os = [];
+                $('.check-os').each(function(){
+                    if(typeof os[$(this).data('os_lojista_id')] == 'undefined') os[$(this).data('os_lojista_id')] = [];
+                    if($(this).prop('checked')){
+                        os[$(this).data('os_lojista_id')].push({lojista_id: $(this).data('os_lojista_id'), os_id: $(this).data('os_id')});
+                    }
+                });
+
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Somar os Serviços da OS?',
+                    input: 'checkbox',
+                    inputPlaceholder: 'Enviar uma copia aos Lojistas?',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sim',
+                    cancelButtonText: 'Não',
+                }).then((result)=>{
+                    if(result.isConfirmed){
+                        Swal.fire({
+                            title: 'Gerando documentos, aguarde...',
+                            allowOutsideClick: false,
+                            timerProgressBar: true,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            }
+                        });
+                        window.open(`{{asset('gerar-documento-soma-servicos-os/${btoa(JSON.stringify(os))}')}}`,'_blank');
+
+                        if(result.value == 1){
+                            $.ajax({
+                                url: `{{route('enviaLojistaDocumentoSOS')}}`,
+                                type: 'POST',
+                                data: {os},
+                                async: false,
+                                success: (data) => {
+                                    // console.log(data);
+                                }
+                            });
+                        }
+
+                        setTimeout(() => {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Documentos gerados com sucesso!',
+                            });
+                        }, 1200);
+                    }
+                });
+            });
+        });
+    </script>
 @endsection

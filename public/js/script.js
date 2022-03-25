@@ -352,14 +352,13 @@ $(document).ready(function() {
                 $('[name="plate_car"]').addClass('text-uppercase').mask(MercoSulMaskBehavior, mercoSulOptions);
                 $('[name="cpf"]').mask('000.000.000-00');
                 $('[name="cnpj"]').mask('00.000.000/0000-00');
-                $('[name="document_number"]').mask('000.000.000-00');
-                $(document).on('change', '[name="type_document"]', function(){
-                    if($(this).val() == 'cpf'){
+                setTimeout(()=>{
+                    if($($(this).data('target')).find('[name="type_document"]').val() == 'cpf'){
                         $('[name="document_number"]').mask('000.000.000-00');
                     }else{
                         $('[name="document_number"]').mask('00.000.000/0000-00');
                     }
-                });
+                },1000);
 
                 // Telefone/Celeular
                 var behavior = function (val) {

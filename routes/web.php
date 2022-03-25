@@ -52,6 +52,9 @@ Route::middleware(['auth:web'])->group(function(){
 
     Route::get('/imprimirOS/{id?}', [GeralController::class, 'imprimirOS'])->name('imprimirOS');
     Route::get('/imprimirReciboOS/{id?}', [GeralController::class, 'imprimirReciboOS'])->name('imprimirReciboOS');
+
+    Route::post('envia-copia-da-os-somada', [GeralController::class, 'enviaLojistaDocumentoSOS'])->name('enviaLojistaDocumentoSOS');
+    Route::get('gerar-documento-soma-servicos-os/{os}', [GeralController::class, 'geraDocumentoSOS'])->name('geraDocumentoSOS');
 });
 
 Route::post('/logout',  [LoginController::class, 'logout'])->name('logout');

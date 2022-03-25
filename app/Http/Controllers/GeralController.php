@@ -13,6 +13,7 @@ use App\Mail\ShippingInfos;
 use App\Models\MissingInfo;
 use App\Models\Solicitacao;
 use App\Models\VeiculoFoto;
+use App\Mail\SendOSServices;
 use Illuminate\Http\Request;
 use App\Models\DocumentImage;
 use Illuminate\Support\Facades\App;
@@ -30,11 +31,22 @@ class GeralController extends Controller
         return response()->json($cep);
     }
 
-    public function solicitacoes()
+    public function solicitacoes(Request $request)
     {
         $solicitacoes = new Solicitacao();
         if(auth()->user()->permission == 0) $solicitacoes = $solicitacoes->where('lojista_id', auth()->user()->id);
+        if(isset($request->lojista_id)){
+            if($request->lojista_id !== 'todos'){
+                $solicitacoes = $solicitacoes->where('lojista_id', $request->lojista_id);
+            }
+        }
+        if(isset($request->os_status)){
+            if($request->os_status !== 'todos'){
+                $solicitacoes = $solicitacoes->where('status', $request->os_status);
+            }
+        }
         $solicitacoes = $solicitacoes->paginate(50);
+        $lojistas = user::where('permission', 0)->get();
         return view('solicitacoes', get_defined_vars());
     }
 
@@ -514,6 +526,66 @@ class GeralController extends Controller
         }
 
         return response()->json($data,200);
+    }
+
+    public function geraDocumentoSOS($os)
+    {
+        $os = collect(json_decode(base64_decode($os)))->filter();
+        $os_pdfs = [];
+        foreach ($os as $os_item) {
+            $solicitacoes = Solicitacao::whereIn('id', collect($os_item)->map(function($query){return $query->os_id;}))->get();
+            $pdf = App::make('dompdf.wrapper');
+            $html_solicitacao = view('components.htmlPdfSomaSOS', get_defined_vars())->render();
+            $pdf->loadHTML($html_solicitacao);
+            // $pdf->stream('OSs-'.$solicitacoes->map(function($query){return $query->id;})->join('-').'.pdf');
+            $content = $pdf->download()->getOriginalContent();
+
+            $os_pdfs[] = 'OSs-'.$solicitacoes->map(function($query){return $query->id;})->join('-').'.pdf';
+            Storage::put('public/pdfs/'.'OSs-'.$solicitacoes->map(function($query){return $query->id;})->join('-').'.pdf',$content) ;
+        }
+
+        $zip_file = 'OSs.zip'; // Name of our archive to download
+
+        $zip = new \ZipArchive();
+        $zip->open($zip_file, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
+
+        foreach($os_pdfs as $os_pdf){
+            $zip->addFile(public_path('storage/pdfs/'.$os_pdf), $os_pdf);
+        }
+        $zip->close();
+
+        foreach($os_pdfs as $os_pdf){
+            Storage::delete('public/pdfs/'.$os_pdf);
+        }
+
+        header('Content-type: application/zip');
+        header('Content-disposition: attachment; filename="OSs.zip"');
+        readfile($zip_file);
+    
+        unlink($zip_file);
+        // return response()->download($zip_file);
+    }
+
+    public function enviaLojistaDocumentoSOS(Request $request)
+    {
+        $os = collect($request->os)->filter();
+        $os_pdfs = [];
+        foreach ($os as $os_item) {
+            $solicitacoes = Solicitacao::whereIn('id', collect($os_item)->map(function($query){return $query['os_id'];}))->get();
+            $pdf = App::make('dompdf.wrapper');
+            $html_solicitacao = view('components.htmlPdfSomaSOS', get_defined_vars())->render();
+            $pdf->loadHTML($html_solicitacao);
+            // $pdf->stream('OSs-'.$solicitacoes->map(function($query){return $query->id;})->join('-').'.pdf');
+            $content = $pdf->download()->getOriginalContent();
+
+            $os_pdfs[] = 'OSs-'.$solicitacoes->map(function($query){return $query->id;})->join('-').'.pdf';
+            Storage::put('public/pdfs_mail/'.'OSs-'.$solicitacoes->map(function($query){return $query->id;})->join('-').'.pdf',$content) ;
+            Mail::to($solicitacoes[0]->lojista->email)->send(new SendOSServices('OSs-'.$solicitacoes->map(function($query){return $query->id;})->join('-').'.pdf'));
+        }
+
+        foreach($os_pdfs as $os_pdf){
+            Storage::delete('public/pdfs_mail/'.$os_pdf);
+        }
     }
 
     // ------------------------------

@@ -13,8 +13,8 @@
         <div class="form-group col-12 col-sm-3">
             <label for="type_document">Tipo Documento</label>
             <select name="type_document" class="form-control form-control-sm" @if($permission) readonly @endif>
-                <option value="cpf" value="{{$client->type_document == 'cpf' ? 'selected' : ''}}">CPF</option>
-                <option value="cnpj" value="{{$client->type_document == 'cnpj' ? 'selected' : ''}}">CNPJ</option>
+                <option value="cpf" {{$client->type_document == 'cpf' ? 'selected' : ''}}>CPF</option>
+                <option value="cnpj" {{$client->type_document == 'cnpj' ? 'selected' : ''}}>CNPJ</option>
             </select>
         </div>
         <div class="form-group col-12 col-sm-3">
