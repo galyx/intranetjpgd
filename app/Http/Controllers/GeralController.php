@@ -126,7 +126,6 @@ class GeralController extends Controller
 
     public function novaSolicitacao()
     {
-        // dd(collect(session()->get('_old_input'))->forget('_token'));
         return view('novaSolicitacao');
     }
 
@@ -177,6 +176,7 @@ class GeralController extends Controller
             'veiculo_id' => $veiculo_id,
             'observacao' => $request->observacao,
             'descricao_servicos' => $request->descricao_servicos,
+            'date_aquisicao' => date('Y-m-d', strtotime(str_replace('/','-',$request->date_aquisicao))),
         ]);
 
         if(isset(User::find($request->lojista_id)->userData->razao_social)){
@@ -234,6 +234,7 @@ class GeralController extends Controller
         Solicitacao::find($request->solicitacao_id)->update([
             'observacao' => $request->observacao,
             'descricao_servicos' => $request->descricao_servicos,
+            'date_aquisicao' => date('Y-m-d', strtotime(str_replace('/','-',$request->date_aquisicao))),
         ]);
         Mail::to('zednetinformatica@gmail.com')->send(new ShippingInfos('Informamos que que o Lojista '.User::find($request->lojista_id)->userData->razao_social.' fez uma atualização nas informações da solicitação criada! #'.\Str::padLeft($request->solicitacao_id, 6, '0')));
         return redirect()->route('solicitacoes')->with('success', 'Sua solicitação foi atualizada com successo!');
@@ -559,8 +560,8 @@ class GeralController extends Controller
         if(isset($request->client_id)){
             $client = Client::find($request->client_id)->update($client_create);
         }else{
-            if(Client::where('lojista_id', $request->lojista_id)->where('document_number', $request->document_number)->get()->count() > 0){
-                Client::where('lojista_id', $request->lojista_id)->where('document_number', $request->document_number)->update($client_create);
+            if(Client::where('lojista_id', isset($request->particular) ? 0 : $request->lojista_id)->where('document_number', $request->document_number)->get()->count() > 0){
+                Client::where('lojista_id', isset($request->particular) ? 0 : $request->lojista_id)->where('document_number', $request->document_number)->update($client_create);
                 $client = Client::where('lojista_id', $request->lojista_id)->where('document_number', $request->document_number)->first();
             }else{
                 $client = Client::create($client_create);
@@ -620,8 +621,8 @@ class GeralController extends Controller
         if(isset($request->veiculo_id)){
             $veiculo = Veiculo::find($request->veiculo_id)->update($veiculo_create);
         }else{
-            if(Veiculo::where('lojista_id', $request->lojista_id)->where('renavam', $request->renavam)->get()->count() > 0){
-                Veiculo::where('lojista_id', $request->lojista_id)->where('renavam', $request->renavam)->update($veiculo_create);
+            if(Veiculo::where('lojista_id', isset($request->particular) ? 0 : $request->lojista_id)->where('renavam', $request->renavam)->get()->count() > 0){
+                Veiculo::where('lojista_id', isset($request->particular) ? 0 : $request->lojista_id)->where('renavam', $request->renavam)->update($veiculo_create);
                 $veiculo = Veiculo::where('lojista_id', $request->lojista_id)->where('renavam', $request->renavam)->first();
             }else{
                 $veiculo = Veiculo::create($veiculo_create);

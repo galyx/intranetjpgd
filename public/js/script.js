@@ -5,6 +5,18 @@ $(document).ready(function() {
         }
     });
 
+    $('.date-mask-single').daterangepicker({
+        singleDatePicker: true,
+        showDropdowns: true,
+        locale: {
+            format: 'DD/MM/YYYY',
+            daysOfWeek: ['dom','seg','ter','qua','qui','sex','sab'],
+            monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','outubro','Novembro','Dezembro'],
+            applyLabel: 'Aplicar',
+            cancelLabel: 'Cancelar'
+        }
+    });
+
     let ext_icon = {
         'pdf': `<i class="fa-solid fa-file-pdf"></i>`,
         'doc': `<i class="fa-solid fa-file-lines"></i>`,

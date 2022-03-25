@@ -25,7 +25,6 @@
                                                 <th>Renavam</th>
                                                 <th>Ano Fab./Ano Mod.</th>
                                                 <th>Marca Modelo</th>
-                                                <th>Aquisição</th>
                                                 <th>Ações</th>
                                             </tr>
                                         </thead>
@@ -36,7 +35,6 @@
                                                     <td>{{$veiculo->renavam}}</td>
                                                     <td>{{$veiculo->year_fab_mod}}</td>
                                                     <td>{{$veiculo->brand_model}}</td>
-                                                    <td>{{date('d/m/Y', strtotime($veiculo->created_at))}}</td>
                                                     <td>
                                                         <div class="btn-group">
                                                             <button type="button" class="btn btn-info btn-editar" data-href="{{route('buscaDadosGerais')}}" data-id="{{$veiculo->id}}" data-table="veiculo" data-target="#alteraDatas">Alterar</button>

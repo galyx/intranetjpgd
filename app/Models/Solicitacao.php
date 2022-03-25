@@ -18,6 +18,7 @@ class Solicitacao extends Model
         'despachante_observacao',
         'descricao_servicos',
         'valor_orcamento',
+        'date_aquisicao',
         'status',
     ];
 

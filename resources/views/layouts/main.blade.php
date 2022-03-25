@@ -12,6 +12,7 @@
   <!-- Theme style -->
   <link rel="stylesheet" href="{{asset('plugins/adminlte/css/adminlte.min.css')}}">
   <link rel="stylesheet" href="{{asset('plugins/jquery-ui-1.13.0/jquery-ui.min.css')}}" />
+  <link rel="stylesheet" href="{{asset('plugins/daterangepicker/daterangepicker.css')}}" />
 
   <style>
     .foto i {
@@ -110,6 +111,8 @@
   <script src="{{asset('plugins/valida_cpf_cnpj.js')}}"></script>
   <script src="{{asset('plugins/mask.jquery.js')}}"></script>
   <script src="{{asset('plugins/mask.money.js')}}"></script>
+  <script src="{{asset('plugins/moment/moment.min.js')}}"></script>
+  <script src="{{asset('plugins/daterangepicker/daterangepicker.js')}}"></script>
   <script src="{{asset('js/script.min.js')}}"></script>
   <script>
     $(document).ready(function(){

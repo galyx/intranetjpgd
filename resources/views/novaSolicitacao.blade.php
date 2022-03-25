@@ -133,6 +133,10 @@
                                                 <label for="chassi_car">Chassi</label>
                                                 <input type="text" class="form-control form-control-sm text-uppercase" name="chassi_car">
                                             </div>
+                                            <div class="form-group col-12 col-sm-3">
+                                                <label for="date_aquisicao">Data de Aquisição</label>
+                                                <input type="text" class="form-control form-control-sm date-mask-single" name="date_aquisicao">
+                                            </div>
                                             <div class="form-group col-12">
                                                 <label for="descricao_servicos">Descrição dos Serviços</label>
                                                 <textarea name="descricao_servicos" class="form-control"></textarea>
