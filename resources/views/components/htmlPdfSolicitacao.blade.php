@@ -170,16 +170,25 @@
         </table>
     </div>
 
-    <div>
-        <h4>Observações do Lojista</h4>
-        <div>{{$solicitacao->observacao}}</div>
-    </div>
-    
-    <div>
-        <h4>Observações do Despachante</h6>
-        <div>{{$solicitacao->observacao}}</div>
-    </div>
-    
+    @if (!empty($solicitacao->descricao_servicos))
+        <div>
+            <h4>Descrição dos Serviços</h4>
+            <div>{{$solicitacao->descricao_servicos}}</div>
+        </div>
+    @endif
+    @if (!empty($solicitacao->observacao))
+        <div>
+            <h4>Observações do Lojista</h4>
+            <div>{{$solicitacao->observacao}}</div>
+        </div>
+    @endif
+    @if (!empty($solicitacao->despachante_observacao))
+        <div>
+            <h4>Observações do Despachante</h6>
+            <div>{{$solicitacao->despachante_observacao}}</div>
+        </div>
+    @endif
+
     <div><h2>Orçamento</h2></div>
 
     <table width="100%">
