@@ -35,7 +35,7 @@
                                             </div>
                                             <div class="form-group col-12 col-sm-3">
                                                 <label for="document_number">Numero Documento</label>
-                                                <input type="text" class="form-control form-control-sm" value="{{$solicitacao->client->document_number}}" data-autocomplete="true" data-auto_preenchimento="sim" data-tabela="client" name="document_number">
+                                                <input type="text" class="form-control form-control-sm getDocument" data-document="{{$solicitacao->client->document_number}}" value="{{$solicitacao->client->document_number}}" data-autocomplete="true" data-auto_preenchimento="sim" data-tabela="client" name="document_number">
                                             </div>
                                             <div class="form-group col-12 col-sm-6">
                                                 <label for="full_name">Nome Completo</label>
@@ -240,6 +240,11 @@
 @section('script')
     <script>
         $(document).ready(function(){
+            $('form').find('[name="type_document"]').trigger('change');
+            setTimeout(() => {
+                $('.getDocument').val($('.getDocument').data('document'));
+            }, 100);
+
             if($('.erros_input').val()){
                 $.each(JSON.parse($('.erros_input').val()), (key, value) => {
                     $('form').find('[name="' + key + '"]').addClass('is-invalid').parent().append('<span class="invalid-feedback">' + value[0] + '</span>');
