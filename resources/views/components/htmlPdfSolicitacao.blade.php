@@ -163,7 +163,7 @@
                 <tr>
                     <td colspan="3">
                         <span>Aquisicao:</span>
-                        <div>{{date('d/m/Y', strtotime($solicitacao->veiculo->created_at))}}</div>
+                        <div>{{date('d/m/Y', strtotime($solicitacao->date_aquisicao))}}</div>
                     </td>
                 </tr>
             </tbody>

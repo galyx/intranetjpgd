@@ -70,7 +70,7 @@
         </div>
         <div class="col-12 col-sm-4 py-2 px-1">
             <span>Aquisição:</span>
-            <div class="border-bottom">{{date('d/m/Y', strtotime($solicitacao->veiculo->created_at))}}</div>
+            <div class="border-bottom">{{date('d/m/Y', strtotime($solicitacao->date_aquisicao))}}</div>
         </div>
     </div>
     <div class="mt-3">
