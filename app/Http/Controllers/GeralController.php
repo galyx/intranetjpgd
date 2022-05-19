@@ -33,19 +33,39 @@ class GeralController extends Controller
 
     public function solicitacoes(Request $request)
     {
-        $solicitacoes = new Solicitacao();
-        if(auth()->user()->permission == 0) $solicitacoes = $solicitacoes->where('lojista_id', auth()->user()->id);
+        $solicitacoes_analise = new Solicitacao();
+        $solicitacoes_finalizada = new Solicitacao();
+        $solicitacoes_arquivada = new Solicitacao();
+        #OS EM ANALISE
+        if(auth()->user()->permission == 0) $solicitacoes_analise = $solicitacoes_analise->where('lojista_id', auth()->user()->id);
         if(isset($request->lojista_id)){
             if($request->lojista_id !== 'todos'){
-                $solicitacoes = $solicitacoes->where('lojista_id', $request->lojista_id);
+                $solicitacoes_analise = $solicitacoes_analise->where('lojista_id', $request->lojista_id);
             }
         }
-        if(isset($request->os_status)){
-            if($request->os_status !== 'todos'){
-                $solicitacoes = $solicitacoes->where('status', $request->os_status);
+        $solicitacoes_analise_count = $solicitacoes_analise->where('status', 0)->get()->count();
+        $solicitacoes_analise = $solicitacoes_analise->where('status', 0)->paginate($perPage = 50, $columns = ['*'], $pageName = 'analise');
+        ################
+        #OS FINALIZADA
+        if(auth()->user()->permission == 0) $solicitacoes_finalizada = $solicitacoes_finalizada->where('lojista_id', auth()->user()->id);
+        if(isset($request->lojista_id)){
+            if($request->lojista_id !== 'todos'){
+                $solicitacoes_finalizada = $solicitacoes_finalizada->where('lojista_id', $request->lojista_id);
             }
         }
-        $solicitacoes = $solicitacoes->paginate(50);
+        $solicitacoes_finalizada_count = $solicitacoes_finalizada->where('status', 1)->get()->count();
+        $solicitacoes_finalizada = $solicitacoes_finalizada->where('status', 1)->paginate($perPage = 50, $columns = ['*'], $pageName = 'analise');
+        ################
+        #OS ARQUIVADA
+        if(auth()->user()->permission == 0) $solicitacoes_arquivada = $solicitacoes_arquivada->where('lojista_id', auth()->user()->id);
+        if(isset($request->lojista_id)){
+            if($request->lojista_id !== 'todos'){
+                $solicitacoes_arquivada = $solicitacoes_arquivada->where('lojista_id', $request->lojista_id);
+            }
+        }
+        $solicitacoes_arquivada_count = $solicitacoes_arquivada->where('status', 2)->get()->count();
+        $solicitacoes_arquivada = $solicitacoes_arquivada->where('status', 2)->paginate($perPage = 50, $columns = ['*'], $pageName = 'analise');
+        ################
         $lojistas = user::where('permission', 0)->get();
         return view('solicitacoes', get_defined_vars());
     }
@@ -427,6 +447,12 @@ class GeralController extends Controller
         switch($request->table){
             case 'user':
                 User::find($request->id)->update(['status' => $request->status]);
+                break;
+            case 'solicitacao_arquivar':
+                Solicitacao::find($request->id)->update(['status' => 2]);
+                break;
+            case 'solicitacao_desarquivar':
+                Solicitacao::find($request->id)->update(['status' => 0]);
                 break;
         }
 

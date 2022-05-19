@@ -304,6 +304,74 @@ $(document).ready(function() {
         });
     });
 
+    $(document).on('click', '.btn-arquivar', function(){
+        Swal.fire({
+            icon: 'warning',
+            title: 'Arquivar Dados?',
+            showCancelButton: true,
+            confirmButtonText: 'Sim',
+            cancelButtonText: 'Cancelar',
+        }).then((result) => {
+            if(result.isConfirmed){
+                Swal.fire({
+                    title: 'Arquivando, aguarde...',
+                    allowOutsideClick: false,
+                    timerProgressBar: true,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+                $.ajax({
+                    url: $(this).data('href'),
+                    type: 'POST',
+                    data: {table: $(this).data('table'), id: $(this).data('id')},
+                    success: (data) => {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Dados Arquivados'
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    }
+                });
+            }
+        });
+    });
+
+    $(document).on('click', '.btn-desarquivar', function(){
+        Swal.fire({
+            icon: 'warning',
+            title: 'Desarquivar Dados?',
+            showCancelButton: true,
+            confirmButtonText: 'Sim',
+            cancelButtonText: 'Cancelar',
+        }).then((result) => {
+            if(result.isConfirmed){
+                Swal.fire({
+                    title: 'Recuperando, aguarde...',
+                    allowOutsideClick: false,
+                    timerProgressBar: true,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+                $.ajax({
+                    url: $(this).data('href'),
+                    type: 'POST',
+                    data: {table: $(this).data('table'), id: $(this).data('id')},
+                    success: (data) => {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Dados Recuperados'
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    }
+                });
+            }
+        });
+    });
+
     $(document).on('click', '.btn-delete', function(){
         Swal.fire({
             icon: 'warning',
