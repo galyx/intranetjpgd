@@ -212,7 +212,7 @@ class GeralController extends Controller
         ]);
 
         if(isset(User::find($request->lojista_id)->userData->razao_social)){
-            Mail::to('zednetinformatica@gmail.com')->send(new ShippingInfos('Informamos que o Lojista '.User::find($request->lojista_id)->userData->razao_social.' abriu uma solicitação! #'.\Str::padLeft($solicitacao->id, 6, '0')));
+            Mail::to('administrativo@jpgdespachante.com.br')->send(new ShippingInfos('Informamos que o Lojista '.User::find($request->lojista_id)->userData->razao_social.' abriu uma solicitação! #'.\Str::padLeft($solicitacao->id, 6, '0')));
         }
         return redirect()->route('solicitacoes')->with('success', 'Sua solicitação foi enviada com successo!');
     }
@@ -269,7 +269,7 @@ class GeralController extends Controller
             'date_aquisicao' => date('Y-m-d', strtotime(str_replace('/','-',$request->date_aquisicao))),
         ]);
         $info_1 = isset(User::find($request->lojista_id)->userData->razao_social) ? 'Informamos que o Lojista '.User::find($request->lojista_id)->userData->razao_social.' fez uma atualização nas informações da solicitação criada! #'.\Str::padLeft($request->solicitacao_id, 6, '0') : 'Informamos que ouve uma atualização nas informações da solicitação criada! #'.\Str::padLeft($request->solicitacao_id, 6, '0') ;
-        Mail::to('zednetinformatica@gmail.com')->send(new ShippingInfos($info_1));
+        Mail::to('administrativo@jpgdespachante.com.br')->send(new ShippingInfos($info_1));
         return redirect()->route('solicitacoes')->with('success', 'Sua solicitação foi atualizada com successo!');
     }
 
