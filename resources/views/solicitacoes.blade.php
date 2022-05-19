@@ -141,6 +141,7 @@
                                                                     @if (auth()->user()->permission == 10)
                                                                         <a href="{{route('editar-solicitacao', $solicitacao->id)}}" class="btn btn-primary">Editar</a>
                                                                         <button type="button" class="btn btn-warning btn-arquivar" data-table="solicitacao_arquivar" data-href="{{route('alteraStatus.post')}}" data-id="{{$solicitacao->id}}">Arquivar</button>
+                                                                        <button type="button" class="btn btn-danger btn-delete" data-table="solicitacao" data-href="{{route('destroyData.post')}}" data-id="{{$solicitacao->id}}" data-table="solicitacao" data-target="#conferirSolicitacao">Apagar</button>
                                                                     @endif
                                                                 </div>
                                                             </td>
