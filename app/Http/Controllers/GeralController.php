@@ -77,20 +77,20 @@ class GeralController extends Controller
         if(isset($request->total_value))$solicitacao_update['valor_orcamento'] = $request->total_value;
         Solicitacao::find($request->solicitacao_id)->update($solicitacao_update);
 
+        $itens_key = [];
         if(isset($request->itens)){
             foreach(array_chunk($request->itens,2) as $item){
                 if($item[0]){
-                    Orcamento::create([
+                    $item_orcamento = Orcamento::create([
                         'solicitacao_id' => $request->solicitacao_id,
                         'item_name' => $item[0],
                         'item_value' => str_replace(['.',','],['','.'], $item[1]),
                     ]);
+                    $itens_key[] = $item_orcamento->id;
                 }
             }
         }
-
         if(isset($request->itens_create)){
-            $itens_key = [];
             foreach($request->itens_create as $item_key => $item_create){
                 $itens_key[] = $item_key;
                 Orcamento::find($item_key)->update([
