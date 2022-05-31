@@ -638,6 +638,7 @@ class GeralController extends Controller
     // ------------------------------
     public function saveClient($request)
     {
+        \Log::info(['request', 'saveCliente', $request->all()]);
         if(isset($request->client_foto)) $request->foto = $request->client_foto;
         $client_create['lojista_id'] = isset($request->particular) ? 0 : $request->lojista_id;
         $client_create['particular'] = isset($request->particular) ? 1 : 0;
@@ -658,15 +659,21 @@ class GeralController extends Controller
         $client_create['complement'] = $request->complement;
 
         if(isset($request->client_id)){
-            $client = Client::find($request->client_id)->update($client_create);
+            Client::find($request->client_id)->update($client_create);
+            $client = Client::find($request->client_id);
+            \Log::info(['if:01', 'saveCliente', $client]);
         }else{
             if(Client::where('lojista_id', isset($request->particular) ? 0 : $request->lojista_id)->where('document_number', $request->document_number)->get()->count() > 0){
                 Client::where('lojista_id', isset($request->particular) ? 0 : $request->lojista_id)->where('document_number', $request->document_number)->update($client_create);
                 $client = Client::where('lojista_id', $request->lojista_id)->where('document_number', $request->document_number)->first();
+                \Log::info(['if:02', 'saveCliente', $client]);
             }else{
                 $client = Client::create($client_create);
+                \Log::info(['else:02', 'saveCliente', $client]);
             }
         }
+
+        \Log::info(['Client:class', 'saveCliente', $client]);
 
         $client_id = $request->client_id ?? $client->id;
 
