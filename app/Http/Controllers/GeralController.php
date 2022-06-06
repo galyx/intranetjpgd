@@ -178,6 +178,7 @@ class GeralController extends Controller
             'color_car' => 'required|string',
             'year_fab_mod' => 'required|string',
             'brand_model' => 'required|string',
+            'lojista_id' => 'required_unless:particular,true',
         ];
 
         $customMessages = [
@@ -195,6 +196,7 @@ class GeralController extends Controller
             'color_car.required' => 'O campo Cor do Veiculo é obrigatório!',
             'year_fab_mod.required' => 'O campo Ano Fab./Ano Mod. é obrigatório!',
             'brand_model.required' => 'O campo Marca/Modelo é obrigatório!',
+            'lojista_id.required_unless' => 'O campo Lojista é obrigatório!',
         ];
 
         $this->validate($request, $rules, $customMessages);
