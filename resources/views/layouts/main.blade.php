@@ -91,7 +91,7 @@
     <!-- Main Footer -->
     <footer class="main-footer">
       <!-- Default to the left -->
-      <strong>JPG Despachante {{date('Y')}} &copy; Desenvolvido por <a href="https://agenciaweb7.com.br">Agência Web7</a></strong>
+      <strong>JPG Despachante {{date('Y')}} &copy; Desenvolvido por <a href="#">World4Dev</a></strong>
     </footer>
   </div>
   <!-- ./wrapper -->
